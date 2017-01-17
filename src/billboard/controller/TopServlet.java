@@ -9,9 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import billboard.beans.User;
-import billboard.beans.UserMessage;
-import billboard.service.MessageService;
+import billboard.beans.UserPostiong;
+import billboard.service.UserPostingService;
 
 @WebServlet(urlPatterns = { "/index.jsp" })
 public class TopServlet extends HttpServlet {
@@ -21,27 +20,46 @@ public class TopServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 
-		User user = (User) request.getSession().getAttribute("loginUser");
-		boolean isShowMessageForm;
-		if (user != null) {
-			isShowMessageForm = true;
-		} else {
-			isShowMessageForm = false;
+		if (request.getSession().getAttribute("loginUser") == null) {
+			response.sendRedirect("login");
+			return;
 		}
+		String categories[] = new String[3];
+		categories[0] = "category1";
+		categories[1] = "category2";
+		categories[2] = "category3";
+		request.getSession().setAttribute("categories", categories);
 
-		List<UserMessage> messages;
-		if (request.getParameter("account") != null) {
-			messages = new MessageService().getMessage("account", request.getParameter("account"));
-		} else if (request.getParameter("user_id") != null) {
-			messages = new MessageService().getMessage("user_id", request.getParameter("user_id"));
-		} else {
-			messages = new MessageService().getMessage();
-		}
-
-		request.setAttribute("messages", messages);
-		request.setAttribute("isShowMessageForm", isShowMessageForm);
+		List<UserPostiong> userPostiongs;
+//		if (request.getParameter("account") != null) {
+//			postings = new PostingService().getPostings("account", request.getParameter("account"));
+//		} else if (request.getParameter("user_id") != null) {
+//			postings = new PostingService().getPostings("user_id", request.getParameter("user_id"));
+//		} else {
+		userPostiongs = new UserPostingService().getUserPostings();
+//		}
+		request.getSession().setAttribute("userPostings", userPostiongs);
 
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
+
+//		User user = (User) request.getSession().getAttribute("loginUser");
+//		if (user == null) {
+//
+//		}
+////		boolean isShowMessageForm;
+////		if (user != null) {
+////			isShowMessageForm = true;
+////		} else {
+////			isShowMessageForm = false;
+////		}
+//
+//		List<UserMessage> messages;
+
+//
+//		request.setAttribute("messages", messages);
+//		request.setAttribute("isShowMessageForm", isShowMessageForm);
+
+
 	}
 
 }

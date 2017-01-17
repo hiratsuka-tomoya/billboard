@@ -29,9 +29,8 @@
 
 	<label for="password">パスワード</label>
 	<input name="password" type="password" id="password"/> <br />
-
+	<br />
 	<input type="submit" value="ログイン" /> <br />
-	<a href="./">戻る</a>
 </form>
 <div class="copyright">Copyright(c)Tomoya Hiratsuka</div>
 </div>
