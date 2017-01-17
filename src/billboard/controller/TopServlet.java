@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import billboard.beans.UserPostiong;
+import billboard.beans.Bean;
+import billboard.service.UserCommentService;
 import billboard.service.UserPostingService;
 
 @WebServlet(urlPatterns = { "/index.jsp" })
@@ -30,15 +31,18 @@ public class TopServlet extends HttpServlet {
 		categories[2] = "category3";
 		request.getSession().setAttribute("categories", categories);
 
-		List<UserPostiong> userPostiongs;
+
 //		if (request.getParameter("account") != null) {
 //			postings = new PostingService().getPostings("account", request.getParameter("account"));
 //		} else if (request.getParameter("user_id") != null) {
 //			postings = new PostingService().getPostings("user_id", request.getParameter("user_id"));
 //		} else {
-		userPostiongs = new UserPostingService().getUserPostings();
+
 //		}
-		request.getSession().setAttribute("userPostings", userPostiongs);
+		List<Bean> userPostings = new UserPostingService().getUserPostings();
+		List<Bean> userComments = new UserCommentService().getUserComments();
+		request.getSession().setAttribute("userPostings", userPostings);
+		request.getSession().setAttribute("userComments", userComments);
 
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 

@@ -25,10 +25,16 @@
 </head>
 <body onLoad="init()">
 	<div class="menu">
-		管理者メニュー（右に寄せて小さめに表示予定）<br> <a href="post">新規投稿</a> <a
-			href="management">ユーザー管理</a><br>
-		------------------------------------------------------------(仮)
+	<a href="newPost">新規投稿</a>
+	<a href="logout">ログアウト</a>
 	</div>
+	------------------------------------------------------------(仮)<br>
+	<div class="managementMenu">
+		管理者メニュー（右に寄せて小さめに表示予定）
+		<br>
+		<a href="management">ユーザー管理</a>
+	</div>
+	------------------------------------------------------------(仮)<br>
 	<div class="refine">
 		絞込み<br>
 		<br>
@@ -52,15 +58,28 @@
 	</div>
 
 	<div class="postings">
-		<c:forEach items="${userPostings}" var="posting">
+		<c:forEach items="${ userPostings }" var="posting">
 			<div class="posting">
 				<div class="title"><c:out value="${posting.title}" /></div>
 				<div class="information">
-					<c:out value="${posting.userName}" />
-					<c:out value="${posting.createdDate}" />
-					<c:out value="${posting.category}" />
+					<c:out value="${ posting.userName }" />
+					<c:out value="${ posting.createdDate }" />
+					<c:out value="${ posting.category }" />
 				</div>
-				<div class="text"><c:out value="${posting.text}" /></div>
+				<div class="mainText"><c:out value="${posting.text}" /></div>
+				-----------------------------(仮)
+				<div class="comment">
+				<c:forEach items="${ userComments }" var="comment">
+					<c:if test="${ posting.id == comment.postingId }">
+						<div class="mainText"><c:out value="${ comment.text }" /></div>
+						<div class="information">
+							<c:out value="${ comment.userName }" />
+							<c:out value="${ comment.createdDate }" />
+						</div>
+						-----------------------------(仮)
+					</c:if>
+				</c:forEach>
+				</div>
 			</div>
 			------------------------------------------------------------(仮)
 		</c:forEach>

@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.util.List;
 
 import billboard.beans.Bean;
-import billboard.dao.UserPostingDao;
+import billboard.dao.UserCommentDao;
 
-public class UserPostingService {
+public class UserCommentService {
 
 //	public void register(Posting posting) {
 //
@@ -34,13 +34,13 @@ public class UserPostingService {
 
 	private static final int LIMIT_NUM = 1000;
 
-	public List<Bean> getUserPostings() {
+	public List<Bean> getUserComments() {
 
 		Connection connection = null;
 		try {
 			connection = getConnection();
 
-			List<Bean> ret = new UserPostingDao().getBeans(connection, LIMIT_NUM);
+			List<Bean> ret = new UserCommentDao().getBeans(connection, LIMIT_NUM);
 
 			commit(connection);
 

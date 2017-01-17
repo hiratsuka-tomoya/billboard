@@ -1,8 +1,10 @@
 package billboard.beans;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
-public class UserPostiong extends Bean {
+public class UserPosting extends Bean {
 
 	private int id;
 	private String title;
@@ -12,6 +14,23 @@ public class UserPostiong extends Bean {
 	private String userName;
 	private Date createdDate;
 	private Date updatedDate;
+
+	@Override
+	public void readResultSet(ResultSet rs) {
+		try {
+			this.setId(rs.getInt("id"));
+			this.setTitle(rs.getString("title"));
+			this.setText(rs.getString("text"));
+			this.setCategory(rs.getString("category"));
+			this.setUserId(rs.getInt("user_id"));
+			this.setUserName(rs.getString("user_name"));
+			this.setCreatedDate(rs.getDate("created_at"));
+			this.setUpdatedDate(rs.getDate("updated_at"));
+		} catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+	}
 
 	public int getId() {
 		return id;

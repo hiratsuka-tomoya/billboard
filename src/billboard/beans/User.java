@@ -1,5 +1,7 @@
 package billboard.beans;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 public class User extends Bean {
@@ -14,6 +16,24 @@ public class User extends Bean {
 	private boolean isStopped;
 	private Date createdDate;
 	private Date updatedDate;
+
+	@Override
+	public void readResultSet(ResultSet rs) {
+		try {
+			this.setId(rs.getInt("id"));
+			this.setLoginID(rs.getString("login_ID"));
+			this.setPassword(rs.getString("password"));
+			this.setName(rs.getString("name"));
+			this.setBranchID(rs.getInt("branch_id"));
+			this.setDepartmentID(rs.getInt("department_id"));
+			this.setStopped(rs.getBoolean("is_Stopped"));
+			this.setCreatedDate(rs.getTimestamp("created_at"));
+			this.setUpdatedDate(rs.getTimestamp("updated_at"));
+		} catch (SQLException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+	}
 
 	public int getId() {
 		return id;

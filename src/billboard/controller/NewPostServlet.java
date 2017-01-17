@@ -13,12 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 
-import billboard.beans.Message;
 import billboard.beans.User;
 import billboard.service.MessageService;
 
-@WebServlet(urlPatterns = { "/newMessage" })
-public class NewMessageServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/newPost" })
+public class NewPostServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
