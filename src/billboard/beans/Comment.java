@@ -33,12 +33,12 @@ public class Comment extends UpdatableBean {
 	@Override
 	public String getSqlInsert() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO postings ( ");
-		sql.append(", text");
+		sql.append("INSERT INTO comments ( ");
+		sql.append("text");
 		sql.append(", user_id");
 		sql.append(", posting_id");
 		sql.append(") VALUES (");
-		sql.append("," + getText());
+		sql.append("'" + getText() + "'");
 		sql.append("," + getUserId());
 		sql.append("," + getPostingId());
 		sql.append(")");

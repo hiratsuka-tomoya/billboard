@@ -38,17 +38,17 @@ public class User extends UpdatableBean {
 	@Override
 	public String getSqlInsert() {
 		StringBuilder sql = new StringBuilder();
-		sql.append("INSERT INTO postings ( ");
-		sql.append(", login_id");
+		sql.append("INSERT INTO users ( ");
+		sql.append("login_id");
 		sql.append(", password");
 		sql.append(", name");
 		sql.append(", branch_id");
 		sql.append(", department_id");
 		sql.append(", is_stopped");
 		sql.append(") VALUES (");
-		sql.append("," + getLoginId());
-		sql.append("," + getPassword());
-		sql.append("," + getName());
+		sql.append("'" + getLoginId() + "'");
+		sql.append("," + "'" +getPassword() + "'");
+		sql.append("," + "'" + getName() + "'");
 		sql.append("," + getBranchId());
 		sql.append("," + getDepartmentId());
 		sql.append("," + isStopped());

@@ -42,14 +42,56 @@ public abstract class Dao {
 		}
 	}
 
-	public Bean getBean(Connection connection, int id) {
+	public List<Bean> getBeans(Connection connection, int num, String whereColumnName, int whereValue) {
 
 		PreparedStatement ps = null;
 		try {
-			String sql = "SELECT * FROM" + tableName + "WHERE id = ?";
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM" + tableName + "WHERE " + "whereColumnName" + " = ? ");
+			sql.append("ORDER BY created_at DESC limit " + num);
+
+			ps = connection.prepareStatement(sql.toString());
+			ps.setInt(1, whereValue);
+
+			ResultSet rs = ps.executeQuery();
+			List<Bean> ret = toBeanList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public List<Bean> getBeans(Connection connection, int num, String whereColumnName, String whereValue) {
+
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("SELECT * FROM " + tableName + " WHERE " + whereColumnName +  " = ? ");
+			sql.append("ORDER BY created_at DESC limit " + num);
+
+			ps = connection.prepareStatement(sql.toString());
+			ps.setString(1, "'" + whereValue + "'");
+
+			ResultSet rs = ps.executeQuery();
+			List<Bean> ret = toBeanList(rs);
+			return ret;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public Bean getBean(Connection connection, String whereColumnName, int whereValue) {
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM" + tableName + "WHERE " + "whereColumnName" + " = ?";
 
 			ps = connection.prepareStatement(sql);
-			ps.setInt(1, id);
+			ps.setInt(1, whereValue);
 
 			ResultSet rs = ps.executeQuery();
 			List<Bean> beanList = toBeanList(rs);

@@ -7,6 +7,7 @@ import java.sql.Connection;
 
 import billboard.beans.User;
 import billboard.dao.UserDao;
+import billboard.utils.CipherUtil;
 
 public class LoginService {
 
@@ -17,7 +18,7 @@ public class LoginService {
 			connection = getConnection();
 
 			UserDao userDao = new UserDao();
-			String encPassword = password; //▲テスト用に非暗号化 CipherUtil.encrypt(password);
+			String encPassword = CipherUtil.encrypt(password);
 			User user = userDao
 					.getUser(connection, loginID, encPassword);
 

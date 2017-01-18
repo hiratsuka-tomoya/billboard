@@ -3,13 +3,18 @@
 <%@page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>掲示板</title>
 <link href="./css/style.css" rel="stylesheet" type="text/css">
-<script Language="JavaScript">
+<!--[if lt IE 9]>
+<script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script type="text/javascript">
 <!--
 	function init() {
 		//日付
@@ -24,8 +29,20 @@
 </script>
 </head>
 <body onLoad="init()">
+
+	<c:if test="${ not empty errorMessages }">
+		<div class="errorMessages">
+			<ul>
+				<c:forEach items="${errorMessages}" var="message">
+					<li><c:out value="${message}" />
+				</c:forEach>
+			</ul>
+		</div>
+		<c:remove var="errorMessages" scope="session"/>
+	</c:if>
+
 	<div class="menu">
-	<a href="newPost">新規投稿</a>
+	<a href="newpost">新規投稿</a>
 	<a href="logout">ログアウト</a>
 	</div>
 	------------------------------------------------------------(仮)<br>
@@ -36,18 +53,20 @@
 	</div>
 	------------------------------------------------------------(仮)<br>
 	<div class="refine">
-		絞込み<br>
+		絞込みメニュー<br>
+		どっちかだけ絞り込むこともある
 		<br>
-		<form action="refine" method="post" name="refine">
+		<form action="./" method="get" name="refine"> <%-- ▲パラメータを付与して呼び出したいだけなのでGET --%>
 			カテゴリー：
 			<div class="category">
-				<select name="category">
+				<select name="refineCategory">
 					<c:forEach items="${categories}" var="category">
-						<option value="category"><c:out value="${category}" /></option>
+						<option value="${category}"><c:out value="${category}" /></option>
 					</c:forEach>
 				</select>
 			</div>
-			<br> 投稿日：
+			<br>
+			投稿日：
 			<div class="date">
 				<input type="text" name="startDate" size="8"> ～ <input
 					type="text" name="endDate" size="8">
@@ -67,6 +86,13 @@
 					<c:out value="${ posting.category }" />
 				</div>
 				<div class="mainText"><c:out value="${posting.text}" /></div>
+				-----------------------------(仮)
+				<form action="newcomment" method="post" name="newcomment">
+					<div class="item">コメント入力欄</div>
+					<textarea name="text" class="textarea" rows="5" cols="100" maxlength="500"></textarea><br>
+					<input type="hidden" name="postingId" value="${posting.id}">
+					<input type="submit" value="投稿">(500字まで)
+				</form>
 				-----------------------------(仮)
 				<div class="comment">
 				<c:forEach items="${ userComments }" var="comment">

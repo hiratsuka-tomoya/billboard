@@ -11,26 +11,6 @@ import billboard.dao.UserPostingDao;
 
 public class UserPostingService {
 
-//	public void register(Posting posting) {
-//
-//		Connection connection = null;
-//		try {
-//			connection = getConnection();
-//
-//			MessageDao messageDao = new MessageDao();
-//			messageDao.insert(connection, posting);
-//
-//			commit(connection);
-//		} catch (RuntimeException e) {
-//			rollback(connection);
-//			throw e;
-//		} catch (Error e) {
-//			rollback(connection);
-//			throw e;
-//		} finally {
-//			close(connection);
-//		}
-//	}
 
 	private static final int LIMIT_NUM = 1000;
 
@@ -41,6 +21,50 @@ public class UserPostingService {
 			connection = getConnection();
 
 			List<Bean> ret = new UserPostingDao().getBeans(connection, LIMIT_NUM);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	public List<Bean> getUserPostings(String whereColumnName, int whereValue) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			List<Bean> ret = new UserPostingDao().getBeans(connection, LIMIT_NUM, whereColumnName, whereValue);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+	public List<Bean> getUserPostings(String whereColumnName, String whereValue) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			List<Bean> ret = new UserPostingDao().getBeans(connection, LIMIT_NUM, whereColumnName, whereValue);
 
 			commit(connection);
 

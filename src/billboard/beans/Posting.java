@@ -39,10 +39,9 @@ public class Posting extends UpdatableBean {
 		sql.append(", category");
 		sql.append(", user_id");
 		sql.append(") VALUES (");
-		sql.append("," + getId());
-		sql.append("," + getTitle());
-		sql.append("," + getText());
-		sql.append("," + getCategory());
+		sql.append("'" + getTitle() + "'");
+		sql.append("," + "'" + getText() + "'");
+		sql.append("," + "'" + getCategory() + "'");
 		sql.append("," + getUserId());
 		sql.append(")");
 		return sql.toString();

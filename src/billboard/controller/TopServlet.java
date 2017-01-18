@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
 import billboard.beans.Bean;
 import billboard.service.UserCommentService;
 import billboard.service.UserPostingService;
@@ -26,11 +28,10 @@ public class TopServlet extends HttpServlet {
 			return;
 		}
 		String categories[] = new String[3];
-		categories[0] = "category1";
-		categories[1] = "category2";
-		categories[2] = "category3";
+		categories[0] = "デフォルト値";
+		categories[1] = "テストカテゴリ1";
+		categories[2] = "テストカテゴリ2";
 		request.getSession().setAttribute("categories", categories);
-
 
 //		if (request.getParameter("account") != null) {
 //			postings = new PostingService().getPostings("account", request.getParameter("account"));
@@ -39,7 +40,16 @@ public class TopServlet extends HttpServlet {
 //		} else {
 
 //		}
-		List<Bean> userPostings = new UserPostingService().getUserPostings();
+		List<Bean> userPostings = null;
+		String refineCategory = request.getParameter("refineCategory");
+		String refineStartDate = request.getParameter("refineStartDate");
+		String refineEndDate = request.getParameter("refineEndDate");
+		if (StringUtils.isEmpty(refineCategory)) {
+			userPostings = new UserPostingService().getUserPostings();
+		} else {
+			userPostings = new UserPostingService().getUserPostings("category", refineCategory);
+		}
+
 		List<Bean> userComments = new UserCommentService().getUserComments();
 		request.getSession().setAttribute("userPostings", userPostings);
 		request.getSession().setAttribute("userComments", userComments);

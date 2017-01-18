@@ -20,8 +20,6 @@ public class UserService {
 			String encPassword = CipherUtil.encrypt(user.getPassword());
 			user.setPassword(encPassword);
 
-//			setDefaultIcon(user);
-
 			UserDao userDao = new UserDao();
 			userDao.insert(connection, user);
 
