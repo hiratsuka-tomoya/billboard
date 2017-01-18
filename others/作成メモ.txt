@@ -1,0 +1,17 @@
+役職は部署に含めて部署テーブルに
+1総務
+2情報セキュ
+3支店長
+4社員
+で登録していいってさ
+
+インデクッスはホーム画面
+
+loginServletで(User)loginUserをセッションに登録し、以後それを参照してログイン状態を判断（Nullなら非ログイン）
+
+多重ログイン
+
+					<fmt:formatDate value="${message.insertDate}"
+						pattern="yyyy/MM/dd HH:mm:ss" />
+						
+						エンティティに対する操作を格納するクラスをサービス

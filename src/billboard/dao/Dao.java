@@ -84,42 +84,4 @@ public abstract class Dao {
 		}
 	}
 
-	public void insert(Connection connection, Bean bean) {
-
-				PreparedStatement ps = null;
-				try {
-					StringBuilder sql = new StringBuilder();
-					sql.append("INSERT INTO users ( ");
-					sql.append("login_id");
-					sql.append(", password");
-					sql.append(", name");
-					sql.append(", branch_id");
-					sql.append(", department_id");
-					sql.append(", is_stopped");
-					sql.append(") VALUES (");
-					sql.append("?"); // login_id
-					sql.append(", ?"); // password
-					sql.append(", ?"); // name
-					sql.append(", ?"); // branch_id
-					sql.append(", ?"); // department_id
-					sql.append(", ?"); // is_stopped
-					sql.append(")");
-
-					ps = connection.prepareStatement(sql.toString());
-
-//					ps.setString(1, bean.getLoginID());
-//					ps.setString(2, bean.getPassword());
-//					ps.setString(3, bean.getName());
-//					ps.setInt(4, bean.getBranchID());
-//					ps.setInt(5, bean.getDepartmentID());
-//					ps.setBoolean(5, bean.isStopped());
-					ps.executeUpdate();
-				} catch (SQLException e) {
-					throw new SQLRuntimeException(e);
-				} finally {
-					close(ps);
-				}
-			}
-
-
 }

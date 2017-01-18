@@ -4,15 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-public class User extends Bean {
+public class User extends UpdatableBean {
 	private static final long serialVersionUID = 1L;
 
 	private int id;
-	private String loginID;
+	private String loginId;
 	private String password;
 	private String name;
-	private int branchID;
-	private int departmentID;
+	private int branchId;
+	private int departmentId;
 	private boolean isStopped;
 	private Date createdDate;
 	private Date updatedDate;
@@ -21,11 +21,11 @@ public class User extends Bean {
 	public void readResultSet(ResultSet rs) {
 		try {
 			this.setId(rs.getInt("id"));
-			this.setLoginID(rs.getString("login_ID"));
+			this.setLoginId(rs.getString("login_ID"));
 			this.setPassword(rs.getString("password"));
 			this.setName(rs.getString("name"));
-			this.setBranchID(rs.getInt("branch_id"));
-			this.setDepartmentID(rs.getInt("department_id"));
+			this.setBranchId(rs.getInt("branch_id"));
+			this.setDepartmentId(rs.getInt("department_id"));
 			this.setStopped(rs.getBoolean("is_Stopped"));
 			this.setCreatedDate(rs.getTimestamp("created_at"));
 			this.setUpdatedDate(rs.getTimestamp("updated_at"));
@@ -35,17 +35,38 @@ public class User extends Bean {
 		}
 	}
 
+	@Override
+	public String getSqlInsert() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("INSERT INTO postings ( ");
+		sql.append(", login_id");
+		sql.append(", password");
+		sql.append(", name");
+		sql.append(", branch_id");
+		sql.append(", department_id");
+		sql.append(", is_stopped");
+		sql.append(") VALUES (");
+		sql.append("," + getLoginId());
+		sql.append("," + getPassword());
+		sql.append("," + getName());
+		sql.append("," + getBranchId());
+		sql.append("," + getDepartmentId());
+		sql.append("," + isStopped());
+		sql.append(")");
+		return sql.toString();
+	}
+
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getLoginID() {
-		return loginID;
+	public String getLoginId() {
+		return loginId;
 	}
-	public void setLoginID(String loginID) {
-		this.loginID = loginID;
+	public void setLoginId(String loginID) {
+		this.loginId = loginID;
 	}
 	public String getPassword() {
 		return password;
@@ -59,17 +80,17 @@ public class User extends Bean {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getBranchID() {
-		return branchID;
+	public int getBranchId() {
+		return branchId;
 	}
-	public void setBranchID(int branchID) {
-		this.branchID = branchID;
+	public void setBranchId(int branchId) {
+		this.branchId = branchId;
 	}
-	public int getDepartmentID() {
-		return departmentID;
+	public int getDepartmentId() {
+		return departmentId;
 	}
-	public void setDepartmentID(int departmentID) {
-		this.departmentID = departmentID;
+	public void setDepartmentId(int departmentId) {
+		this.departmentId = departmentId;
 	}
 	public boolean isStopped() {
 		return isStopped;
@@ -89,5 +110,6 @@ public class User extends Bean {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+
 
 }

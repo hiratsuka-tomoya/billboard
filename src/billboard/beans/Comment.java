@@ -4,13 +4,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
-public class Posting extends UpdatableBean {
+public class Comment extends UpdatableBean {
 
 	private int id;
-	private String title;
 	private String text;
-	private String category;
 	private int userId;
+	private int postingId;
+	private String userName;
 	private Date createdDate;
 	private Date updatedDate;
 
@@ -18,10 +18,10 @@ public class Posting extends UpdatableBean {
 	public void readResultSet(ResultSet rs) {
 		try {
 			this.setId(rs.getInt("id"));
-			this.setTitle(rs.getString("title"));
 			this.setText(rs.getString("text"));
-			this.setCategory(rs.getString("category"));
 			this.setUserId(rs.getInt("user_id"));
+			this.setPostingId(rs.getInt("posting_id"));
+			this.setUserName(rs.getString("user_name"));
 			this.setCreatedDate(rs.getDate("created_at"));
 			this.setUpdatedDate(rs.getDate("updated_at"));
 		} catch (SQLException e) {
@@ -34,16 +34,13 @@ public class Posting extends UpdatableBean {
 	public String getSqlInsert() {
 		StringBuilder sql = new StringBuilder();
 		sql.append("INSERT INTO postings ( ");
-		sql.append("title");
 		sql.append(", text");
-		sql.append(", category");
 		sql.append(", user_id");
+		sql.append(", posting_id");
 		sql.append(") VALUES (");
-		sql.append("," + getId());
-		sql.append("," + getTitle());
 		sql.append("," + getText());
-		sql.append("," + getCategory());
 		sql.append("," + getUserId());
+		sql.append("," + getPostingId());
 		sql.append(")");
 		return sql.toString();
 	}
@@ -54,29 +51,29 @@ public class Posting extends UpdatableBean {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
 	public String getText() {
 		return text;
 	}
 	public void setText(String text) {
 		this.text = text;
 	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
 	public int getUserId() {
 		return userId;
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+	public int getPostingId() {
+		return postingId;
+	}
+	public void setPostingId(int postingId) {
+		this.postingId = postingId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public Date getCreatedDate() {
 		return createdDate;
@@ -90,6 +87,5 @@ public class Posting extends UpdatableBean {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
-
 
 }

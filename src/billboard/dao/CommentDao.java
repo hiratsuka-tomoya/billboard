@@ -1,92 +1,47 @@
 package billboard.dao;
 
-import static billboard.utils.CloseableUtil.*;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.List;
-
 import billboard.beans.Bean;
-import billboard.beans.User;
-import billboard.exception.SQLRuntimeException;
+import billboard.beans.Comment;
 
-public class UserDao extends UpdatableDao {
+public class CommentDao extends UpdatableDao {
 
-	public UserDao() {
-		super("users");
+	public CommentDao() {
+		super("comments");
 	}
 
 	@Override
 	protected Bean makeNewBean() {
-		return new User();
+		return new Comment();
 	}
 
-	public User getUser(Connection connection, String loginID,
-			String password) {
-
-		PreparedStatement ps = null;
-		try {
-			String sql = "SELECT * FROM users WHERE login_id = ? AND password = ?";
-
-			ps = connection.prepareStatement(sql);
-			ps.setString(1, loginID);
-			ps.setString(2, password);
-
-			ResultSet rs = ps.executeQuery();
-			List<Bean> userList = super.toBeanList(rs);
-			if (userList.isEmpty() == true) {
-				return null;
-			} else if (2 <= userList.size()) {
-				//ID重複
-				throw new IllegalStateException("2 <= userList.size()");
-			} else {
-				return (User) userList.get(0);
-			}
-		} catch (SQLException e) {
-			throw new SQLRuntimeException(e);
-		} finally {
-			close(ps);
-		}
-	}
-
-//	public void insert(Connection connection, User user) {
+//	public User getUser(Connection connection, String loginID,
+//			String password) {
 //
 //		PreparedStatement ps = null;
 //		try {
-//			StringBuilder sql = new StringBuilder();
-//			sql.append("INSERT INTO users ( ");
-//			sql.append("login_id");
-//			sql.append(", password");
-//			sql.append(", name");
-//			sql.append(", branch_id");
-//			sql.append(", department_id");
-//			sql.append(", is_stopped");
-//			sql.append(") VALUES (");
-//			sql.append("?"); // login_id
-//			sql.append(", ?"); // password
-//			sql.append(", ?"); // name
-//			sql.append(", ?"); // branch_id
-//			sql.append(", ?"); // department_id
-//			sql.append(", ?"); // is_stopped
-//			sql.append(")");
+//			String sql = "SELECT * FROM users WHERE login_id = ? AND password = ?";
 //
-//			ps = connection.prepareStatement(sql.toString());
+//			ps = connection.prepareStatement(sql);
+//			ps.setString(1, loginID);
+//			ps.setString(2, password);
 //
-//			ps.setString(1, user.getLoginID());
-//			ps.setString(2, user.getPassword());
-//			ps.setString(3, user.getName());
-//			ps.setInt(4, user.getBranchID());
-//			ps.setInt(5, user.getDepartmentID());
-//			ps.setBoolean(5, user.isStopped());
-//			ps.executeUpdate();
+//			ResultSet rs = ps.executeQuery();
+//			List<Bean> userList = super.toBeanList(rs);
+//			if (userList.isEmpty() == true) {
+//				return null;
+//			} else if (2 <= userList.size()) {
+//				//ID重複
+//				throw new IllegalStateException("2 <= userList.size()");
+//			} else {
+//				return (User) userList.get(0);
+//			}
 //		} catch (SQLException e) {
 //			throw new SQLRuntimeException(e);
 //		} finally {
 //			close(ps);
 //		}
 //	}
+
 //
 //	public void update(Connection connection, User user) {
 //
