@@ -31,6 +31,27 @@ public class PostingService {
 		}
 	}
 
+	public Boolean deleteUserPosting(int id) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			Boolean ret = new PostingDao().deleteBeans(connection, id);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
 //	private void setDefaultIcon(User user) {
 //
 //		InputStream is = null;

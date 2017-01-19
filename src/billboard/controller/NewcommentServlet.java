@@ -39,7 +39,6 @@ public class NewcommentServlet extends HttpServlet {
 			HttpServletResponse response) throws IOException, ServletException {
 
 		List<String> messages = new ArrayList<String>();
-
 		HttpSession session = request.getSession();
 		if (isValid(request, messages) == true) {
 

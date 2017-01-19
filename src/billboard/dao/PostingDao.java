@@ -13,4 +13,5 @@ public class PostingDao extends UpdatableDao {
 	protected Bean makeNewBean() {
 		return new Posting();
 	}
+
 }

@@ -3,6 +3,7 @@ package billboard.dao;
 import static billboard.utils.CloseableUtil.*;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -26,6 +27,21 @@ public abstract class UpdatableDao extends Dao {
 			throw new SQLRuntimeException(e);
 		} finally {
 			close(statement);
+		}
+	}
+
+	public Boolean deleteBeans(Connection connection, int id) {
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("DELETE FROM " + tableName + " WHERE id = " + id);
+			ps = connection.prepareStatement(sql.toString());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
 		}
 	}
 }

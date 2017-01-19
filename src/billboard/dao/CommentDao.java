@@ -14,6 +14,7 @@ public class CommentDao extends UpdatableDao {
 		return new Comment();
 	}
 
+
 //	public User getUser(Connection connection, String loginID,
 //			String password) {
 //

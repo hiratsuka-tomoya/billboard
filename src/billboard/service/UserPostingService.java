@@ -80,26 +80,27 @@ public class UserPostingService {
 		}
 	}
 
-//	public List<UserMessage> getMessage(String whereColumn, String whereValue) {
-//
-//		Connection connection = null;
-//		try {
-//			connection = getConnection();
-//
-//			UserMessageDao messageDao = new UserMessageDao();
-//			List<UserMessage> ret = messageDao.getUserMessages(connection, LIMIT_NUM, whereColumn, whereValue);
-//
-//			commit(connection);
-//
-//			return ret;
-//		} catch (RuntimeException e) {
-//			rollback(connection);
-//			throw e;
-//		} catch (Error e) {
-//			rollback(connection);
-//			throw e;
-//		} finally {
-//			close(connection);
-//		}
-//	}
+	public List<Bean> getRefinedUserPostings(String category, String startDate, String endDate ) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			List<Bean> ret = new UserPostingDao().getRefinedBeans(connection, LIMIT_NUM, category, startDate, endDate);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
+
 }

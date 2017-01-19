@@ -51,6 +51,36 @@ public class UserDao extends UpdatableDao {
 		}
 	}
 
+	public boolean stopUser(Connection connection, int id) {
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE " + tableName + " SET is_stopped = 1 WHERE id = " + id);
+			ps = connection.prepareStatement(sql.toString());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
+	public boolean recoverUser(Connection connection, int id) {
+		PreparedStatement ps = null;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("UPDATE " + tableName + " SET is_stopped = 0 WHERE id = " + id);
+			ps = connection.prepareStatement(sql.toString());
+			ps.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
 //	public void insert(Connection connection, User user) {
 //
 //		PreparedStatement ps = null;

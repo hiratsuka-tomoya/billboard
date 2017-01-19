@@ -31,6 +31,28 @@ public class CommentService {
 		}
 	}
 
+	public Boolean deleteUserComment(int id) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			Boolean ret = new CommentDao().deleteBeans(connection, id);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
 //	private void setDefaultIcon(User user) {
 //
 //		InputStream is = null;

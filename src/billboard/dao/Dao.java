@@ -14,7 +14,7 @@ import billboard.exception.SQLRuntimeException;
 
 public abstract class Dao {
 
-	private String tableName;
+	protected String tableName;
 
 	Dao(String tableName) {
 		this.tableName = tableName;
@@ -47,7 +47,7 @@ public abstract class Dao {
 		PreparedStatement ps = null;
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append("SELECT * FROM" + tableName + "WHERE " + "whereColumnName" + " = ? ");
+			sql.append("SELECT * FROM " + tableName + " WHERE " + whereColumnName + " = ? ");
 			sql.append("ORDER BY created_at DESC limit " + num);
 
 			ps = connection.prepareStatement(sql.toString());
