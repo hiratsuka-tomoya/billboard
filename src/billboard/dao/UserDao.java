@@ -23,7 +23,7 @@ public class UserDao extends UpdatableDao {
 		return new User();
 	}
 
-	public User getUser(Connection connection, String loginID,
+	public User getUser(Connection connection, String loginId,
 			String password) {
 
 		PreparedStatement ps = null;
@@ -31,7 +31,7 @@ public class UserDao extends UpdatableDao {
 			String sql = "SELECT * FROM users WHERE login_id = ? AND password = ?";
 
 			ps = connection.prepareStatement(sql);
-			ps.setString(1, loginID);
+			ps.setString(1, loginId);
 			ps.setString(2, password);
 
 			ResultSet rs = ps.executeQuery();
@@ -132,19 +132,19 @@ public class UserDao extends UpdatableDao {
 //			sql.append(", is_stopped = ?");
 //			sql.append(" WHERE");
 //			sql.append(" id = ?");
-//			sql.append(" AND");
-//			sql.append(" update_date = ?");
+////			sql.append(" AND");
+////			sql.append(" update_date = ?");
 //
 //			ps = connection.prepareStatement(sql.toString());
 //
-//			ps.setString(1, user.getLoginID());
+//			ps.setString(1, user.getLoginId());
 //			ps.setString(2, user.getPassword());
 //			ps.setString(3, user.getName());
-//			ps.setInt(4, user.getBranchID());
-//			ps.setInt(5, user.getDepartmentID());
+//			ps.setInt(4, user.getBranchId());
+//			ps.setInt(5, user.getDepartmentId());
 //			ps.setBoolean(6, user.isStopped());
 //			ps.setInt(6, user.getId());
-//			ps.setTimestamp(7, new Timestamp(user.getUpdatedDate().getTime()));
+////			ps.setTimestamp(7, new Timestamp(user.getUpdatedDate().getTime()));
 //
 //			int count = ps.executeUpdate();
 //			if (count == 0) {

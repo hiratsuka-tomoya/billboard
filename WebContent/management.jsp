@@ -30,13 +30,15 @@ function recoverCheck(target) {
 	var result = confirm("[" + target + "]を復帰しますか？" );
 	return result;
 }
-
 </script>
 
 </head>
 <body>
 ユーザー管理<br>
 自分は停止できないようにする▲
+パス以外の全データ表示する
+<br>
+<a href="newuser">ユーザー新規登録</a>
 	<c:if test="${ not empty errorMessages }">
 		<div class="errorMessages">
 			<ul>
@@ -52,7 +54,7 @@ function recoverCheck(target) {
 			<table class="posting">
 			  <tr>
 			    <td><c:out value="${user.id}" /></td>
-			    <td><a href="management"><c:out value="${user.name}" /></a></td>
+			    <td><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
 			    	<c:if test="${user.isStopped() == false}">
 						<td><c:out value="停止中" /></td>
 				    </c:if>

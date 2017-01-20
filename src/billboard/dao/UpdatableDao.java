@@ -44,4 +44,18 @@ public abstract class UpdatableDao extends Dao {
 			close(ps);
 		}
 	}
+
+	public void update(Connection connection, UpdatableBean bean) {
+
+		Statement statement = null;
+		try {
+			String sql = bean.getSqlUpdate();
+			statement = connection.createStatement();
+			statement.executeUpdate(sql.toString());
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(statement);
+		}
+	}
 }

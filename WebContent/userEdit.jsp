@@ -2,17 +2,33 @@
 	pageEncoding="UTF-8"%>
 <%@page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>ユーザー登録</title>
+<title>ユーザー編集</title>
 <link href="./css/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 <!--
 
-function init(branchId, departmentId) {
+function passwordCheck() {
+	var form = document.forms.userEditForm;
+	var result = form.password.value == form.checkPassword.value ? true : false;
+	if (result == false) {
+		var message = "確認用パスワードが一致しません"
+		window.alert(message);
+	}
 
+	return result;
+}
+
+function stopCheck(target) {
+	var result = confirm("[" + target + "]を停止しますか？" );
+	return result;
+}
+
+function init(branchId, departmentId) {
+console.log(branchId);
 	if ( typeof branchId !== "undefined") {
 		var select1 = document.getElementById("branchId");
 		for(var i=0;i<select1.length;i++){
@@ -54,7 +70,7 @@ function changeDepartmentList() {
 </script>
 </head>
 <body onLoad="init(${ branchId },${ departmentId })">
-<div class="heading">ユーザー新規登録</div>
+<div class="heading">ユーザー編集</div>
 <div class="main-contents">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
@@ -66,13 +82,15 @@ function changeDepartmentList() {
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-<form action="newuser" method="post"><br />
+<form action="userEdit" method="post" name="userEditForm" onSubmit = "return passwordCheck()"><br />
 	<label for="loginId">ログインID</label>
-	<input name="loginId" value="${loginId}" id="loginId"/><br />
+	<input name="loginId" value="${ loginId }" id="loginId" maxlength="20" required/><br />
 	<label for="password">パスワード</label>
-	<input name="password" type="password" id="password"/> <br />
+	<input name="password" type="password" id="password" maxlength="255" /> <br />
+	<label for="checkPassword">パスワード（確認用）</label>
+	<input name="checkPassword" type="password" id="checkPassword" maxlength="255" /> <br />
 	<label for="name">ユーザー名</label>
-	<input name="name" value="${name}" id="name"/><br />
+	<input name="name" value="${name}" id="name" maxlength="10" required/><br />
 	<div class="item">支店・部署</div>
 	<select name="branchId" id="branchId" onChange="changeDepartmentList()">
 	<option value="1">本社</option>

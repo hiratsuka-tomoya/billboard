@@ -56,6 +56,20 @@ public class User extends UpdatableBean {
 		return sql.toString();
 	}
 
+	public String getSqlUpdate() {
+		StringBuilder sql = new StringBuilder();
+		sql.append("UPDATE users SET ");
+		sql.append("login_id = " + "'" + getLoginId() + "'");
+		sql.append(", password = " + "'" +getPassword() + "'");
+		sql.append(", name = " + "'" + getName() + "'");
+		sql.append(", branch_id = " + getBranchId());
+		sql.append(", department_id = " + getDepartmentId());
+		sql.append(", is_stopped = " + isStopped());
+		sql.append(" WHERE ");
+		sql.append("id = " + getId());
+		return sql.toString();
+	}
+
 	public int getId() {
 		return id;
 	}

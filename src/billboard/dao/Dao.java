@@ -88,10 +88,9 @@ public abstract class Dao {
 
 		PreparedStatement ps = null;
 		try {
-			String sql = "SELECT * FROM" + tableName + "WHERE " + "whereColumnName" + " = ?";
+			String sql = "SELECT * FROM " + tableName + " WHERE " + whereColumnName + " = " + whereValue;
 
 			ps = connection.prepareStatement(sql);
-			ps.setInt(1, whereValue);
 
 			ResultSet rs = ps.executeQuery();
 			List<Bean> beanList = toBeanList(rs);
