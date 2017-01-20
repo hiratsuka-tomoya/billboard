@@ -13,8 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter("/*")
-public class LoginFilter implements Filter {
+import billboard.beans.User;
+
+@WebFilter("/management/*")
+public class authorityFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -22,19 +24,19 @@ public class LoginFilter implements Filter {
 
 		String target = ((HttpServletRequest) request).getRequestURI();
 		HttpSession session = ((HttpServletRequest) request).getSession();
-		if (target.matches(".*/login$") == false) {
 
-			if (session == null) {
-				session = ((HttpServletRequest) request).getSession(true);
+		if (session == null) {
+			session = ((HttpServletRequest) request).getSession(true);
+			session.setAttribute("target", target);
+			((HttpServletResponse) response).sendRedirect("login");
+		} else {
+			User loginUser = (User)session.getAttribute("loginUser");
+			if (loginUser != null) {
+				if (loginUser.getDepartmentId() != 1) {
 				session.setAttribute("target", target);
-
-				((HttpServletResponse) response).sendRedirect("login");
-			} else {
-				Object loginCheck = session.getAttribute("loginUser");
-				if (loginCheck == null) {
-					session.setAttribute("target", target);
-					((HttpServletResponse) response).sendRedirect("login");
-					return;
+				String contextPath = ((HttpServletRequest) request).getContextPath();
+				((HttpServletResponse) response).sendRedirect(contextPath);
+				return;
 				}
 			}
 		}

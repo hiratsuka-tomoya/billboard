@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import billboard.beans.User;
 import billboard.service.UserService;
 
-@WebServlet(urlPatterns = { "/newuser" })
+@WebServlet(urlPatterns = { "/management/newuser" })
 public class NewuserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -27,7 +27,7 @@ public class NewuserServlet extends HttpServlet {
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
 		if (loginUser == null) {
-			response.sendRedirect("login");
+//			response.sendRedirect("login");
 		} else if (loginUser.getDepartmentId() != 1) {
 			List<String> messages = new ArrayList<String>();
 			messages.add("権限がありません");
@@ -40,7 +40,7 @@ public class NewuserServlet extends HttpServlet {
 			if (request.getSession().getAttribute("departmentId") == null) {
 				request.getSession().setAttribute("departmentId", 1);
 			}
-			request.getRequestDispatcher("newuser.jsp").forward(request, response);
+			request.getRequestDispatcher("/newuser.jsp").forward(request, response);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class NewuserServlet extends HttpServlet {
 			user.setStopped(false);
 			new UserService().register(user);
 
-			response.sendRedirect("./");
+			response.sendRedirect("../management");
 		} else {
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("newuser");	//▲そのページでしか使わないからリクエスト.setAttributeするように変更して、リダイレクトだと消えるしページも移動しないからforwardに変更する

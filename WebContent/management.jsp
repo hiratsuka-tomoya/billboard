@@ -9,17 +9,15 @@
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ユーザー管理</title>
-<link href="./css/style.css" rel="stylesheet" type="text/css">
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css" >
-
 <!--[if lt IE 9]>
 <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+
 
 <script type= text/javascript>
 function stopCheck(target) {
@@ -34,7 +32,7 @@ function recoverCheck(target) {
 
 </head>
 <body>
-ユーザー管理<br>
+<h2>ユーザー管理</h2>
 自分は停止できないようにする▲
 パス以外の全データ表示する
 <br>
@@ -49,20 +47,31 @@ function recoverCheck(target) {
 		</div>
 		<c:remove var="errorMessages" scope="session"/>
 	</c:if>
-	<div class="users">
-		<c:forEach items="${ users }" var="user">
-			<table class="posting">
+	<div class="container">
+		<table class="table table-bordered">
+		   <thead>
+		      <tr>
+		        <th>ID</th>
+		        <th>ユーザー名</th>
+		        <th>状態</th>
+		        <th>停止/復帰</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+			<c:forEach items="${ users }" var="user">
 			  <tr>
-			    <td><c:out value="${user.id}" /></td>
-			    <td><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
+			    <td class="col-md-1"><c:out value="${user.id}" /></td>
+			    <td class="col-md-4"><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
+			    <td class="col-md-4">
 			    	<c:if test="${user.isStopped() == false}">
-						<td><c:out value="停止中" /></td>
+						<c:out value="停止中" />
 				    </c:if>
 				    <c:if test="${user.isStopped() == true}">
-			    		<td><c:out value="▲仮▲" /></td>
+			    		<c:out value="稼働中" />
 				    </c:if>
-		      	<td>
-				    <form action="management" method="post">
+			    </td>
+		      	<td class="col-md-4">
+				    <form action="./top" method="post">
 					    <c:if test="${user.isStopped() == false}">
 					    	<input type="hidden" name="stopUserId" value="${user.id}">
 					    	<input type="submit" value="停止" onClick="return stopCheck('${user.name}')"></input>
@@ -72,14 +81,17 @@ function recoverCheck(target) {
 					    	<input type="submit" value="復帰" onClick="return recoverCheck('${user.name}')"></input>
 					    </c:if>
 				    </form>
-			    <td>
+			    </td>
 			  </tr>
-			</table>
-		</c:forEach>
+			</c:forEach>
+			</tbody>
+		</table>
 	</div>
 
-	<a href="./"><c:out value="ホーム"></c:out></a>
+	<a href="../"><c:out value="ホーム"></c:out></a>
 	<div class="copyright">Copyright(c)Tomoya Hiratsuka</div>
-
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

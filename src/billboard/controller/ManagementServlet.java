@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import billboard.beans.Bean;
 import billboard.service.UserService;
 
-@WebServlet(urlPatterns = { "/management" })
+@WebServlet(urlPatterns = { "/management/top" })
 public class ManagementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -56,7 +56,7 @@ public class ManagementServlet extends HttpServlet {
 			if (StringUtils.isEmpty(userId)) {
 				messages.add("予期せぬエラーが発生しました");
 				request.setAttribute("errorMessages", messages);
-				response.sendRedirect("./");
+				response.sendRedirect("billboard/management/top");
 			} else {
 				new UserService().recoverUser(Integer.parseInt(userId));
 			}

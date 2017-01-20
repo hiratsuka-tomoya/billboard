@@ -16,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import billboard.beans.User;
 import billboard.service.UserService;
 
-@WebServlet(urlPatterns = { "/userEdit" })
+@WebServlet(urlPatterns = { "/management/userEdit" })
 public class UserEditServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -47,7 +47,7 @@ public class UserEditServlet extends HttpServlet {
 			request.getSession().setAttribute("name", editUser.getName());
 			request.getSession().setAttribute("branchId", editUser.getBranchId());
 			request.getSession().setAttribute("departmentId", editUser.getDepartmentId());
-			request.getRequestDispatcher("userEdit.jsp").forward(request, response);
+			request.getRequestDispatcher("/userEdit.jsp").forward(request, response);
 		}
 	}
 
@@ -70,10 +70,10 @@ public class UserEditServlet extends HttpServlet {
 			new UserService().update(toUser,StringUtils.isNotEmpty(request.getParameter("password")));
 
 			request.getSession().removeAttribute("editUser");
-			response.sendRedirect("management");
+			response.sendRedirect("../management");
 		} else {
 			request.setAttribute("errorMessages", messages);
-			request.getRequestDispatcher("userEdit.jsp").forward(request, response);
+			request.getRequestDispatcher("/userEdit.jsp").forward(request, response);
 		}
 	}
 

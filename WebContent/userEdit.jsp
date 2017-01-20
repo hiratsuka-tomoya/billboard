@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ユーザー編集</title>
-<link href="./css/style.css" rel="stylesheet" type="text/css">
+<link href="../css/style.css" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 <!--
 
@@ -105,7 +105,7 @@ function changeDepartmentList() {
 	<select name="departmentId" id="departmentId">
 	</select>
 	<input type="submit" value="登録" /> <br />
-	<a href="management">戻る</a>
+	<a href="./top">戻る</a>
 </form>
 <div class="copyright">Copyright(c)Tomoya Hiratsuka</div>
 </div>

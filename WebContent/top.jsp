@@ -9,16 +9,15 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>掲示板</title>
-<link href="./css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css" >
-
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 <!--[if lt IE 9]>
 <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
 
 <script type= text/javascript>
 function clearRefine(){
@@ -42,9 +41,31 @@ function myConfirm(target) {
     $( "#datepicker2" ).datepicker();
   });
 </script>
-
+<style>
+.rowTitle > div {
+	min-height: 2em;
+	border: 1px solid gray;
+	background: #cef3f5;
+}
+.rowMenu > div {
+	min-height: 3em;
+	border: 1px solid gray;
+	background: #f5cece
+}
+.rowRefine > div {
+	min-height: 5em;
+	border: 1px solid gray;
+	background: #f9cece
+}
+.rowPosting > div {
+	min-height: 10em;
+	border: 1px solid gray;
+	background: #f1cece
+}
+</style>
 </head>
 <body>
+<div class="container-fluid">
 	<c:if test="${ not empty errorMessages }">
 		<div class="errorMessages">
 			<ul>
@@ -55,19 +76,16 @@ function myConfirm(target) {
 		</div>
 		<c:remove var="errorMessages" scope="session"/>
 	</c:if>
-
-	<div class="menu">
-	<a href="newpost">新規投稿</a>
-	<a href="logout">ログアウト</a>
-	</div>
+	<div class="row rowTitle">
+		<div class="col-xs-12">掲示板</div>
+  	</div>
+	<div class="row rowMenu">
+		<div class="col-xs-5"><a href="newpost">新規投稿</a></div>
+		<div class="col-xs-5"><a href="logout">ログアウト</a></div>
+		<div class="col-xs-2"><a href="management/top">ユーザー管理</a></div>
+  	</div>
 	<hr>
-	<div class="managementMenu">
-		管理者メニュー（右に寄せて小さめに表示予定）
-		<br>
-		<a href="management">ユーザー管理</a>
-	</div>
-	<hr>
-	<div class="refine">
+	<div class="rowRefine">
 		絞込みメニュー<br>
 		<br>
 		<form action="./" method="get" name="refine">
@@ -100,7 +118,7 @@ function myConfirm(target) {
 	<div class="postings">
 		<c:forEach items="${ userPostings }" var="posting">
 			<div class="posting">
-				<div class="title"><c:out value="${posting.title}" /></div>
+				<h1><c:out value="${posting.title}" /></h1>
 				<div class="information">
 					<c:out value="${ posting.userName }" />
 					<c:out value="${ posting.createdDate }" />
@@ -118,14 +136,6 @@ function myConfirm(target) {
 					<input type="submit" value="投稿削除"> (投稿者のみ可　管理者はパスで消せるようにしたい)
 				</form>
 				<hr>
-				<form action="newcomment" method="post" name="newcomment">
-					<div class="item">コメント入力欄</div>
-					<textarea name="text" class="textarea" rows="5" cols="100" maxlength="500"></textarea><br>
-					<input type="hidden" name="postingId" value="${posting.id}">
-					<input type="submit" value="投稿">(500字まで)
-				</form>
-				<hr>
-
 				<c:forEach items="${ userComments }" var="comment">
 					<c:if test="${ posting.id == comment.postingId }">
 						<div class="comment">
@@ -143,12 +153,19 @@ function myConfirm(target) {
 						</div>
 					</c:if>
 				</c:forEach>
-
+				<form action="newcomment" method="post" name="newcomment">
+					<div class="item">コメント入力欄</div>
+					<textarea name="text" class="textarea" rows="5" cols="100" maxlength="500"></textarea><br>
+					<input type="hidden" name="postingId" value="${posting.id}">
+					<input type="submit" value="投稿">(500字まで)
+				</form>
+				<hr>
 			</div>
 			<hr>
 		</c:forEach>
 	</div>
 	<div class="copyright">Copyright(c)Tomoya Hiratsuka</div>
-
+</div>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>
