@@ -167,6 +167,29 @@ public class UserService {
 			close(connection);
 		}
 	}
+
+	public Bean getUserFromLoginId(String loginId) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			Dao userDao = new UserDao();
+			Bean user = userDao.getBean(connection, "login_id",  loginId);
+
+			commit(connection);
+
+			return user;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
 //
 //	public User getUser(String accountOrEmail) {
 //

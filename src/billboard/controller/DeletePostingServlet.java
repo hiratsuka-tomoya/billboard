@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 
 import billboard.beans.User;
 import billboard.service.PostingService;
+import billboard.service.UserService;
 
 @WebServlet(urlPatterns = { "/deleteposting" })
 public class DeletePostingServlet extends HttpServlet {
@@ -43,13 +44,14 @@ public class DeletePostingServlet extends HttpServlet {
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 		String postingUserId = request.getParameter("postingUserId");
+		User postingUser = (User) new UserService().getUser(Integer.parseInt(postingUserId));
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
-		if (loginUser.getDepartmentId() != 1)  {
-			if (Integer.parseInt(postingUserId) != loginUser.getId()) {
-				messages.add("他のユーザーの投稿のため削除できません");
-			}
+		if (!(loginUser.getDepartmentId() == 2 ||
+				(loginUser.getDepartmentId() == 3 && (loginUser.getBranchId() == postingUser.getBranchId())))) {
+			messages.add("投稿削除権限がありません");
 		}
+
 		return (messages.size() == 0);
 
 	}

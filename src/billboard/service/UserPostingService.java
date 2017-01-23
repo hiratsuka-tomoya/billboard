@@ -36,6 +36,28 @@ public class UserPostingService {
 		}
 	}
 
+	public List<String> getUserPostingCategories() {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			List<String> ret = new UserPostingDao().getCategories(connection, LIMIT_NUM);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
+
 	public List<Bean> getUserPostings(String whereColumnName, int whereValue) {
 
 		Connection connection = null;
@@ -102,5 +124,15 @@ public class UserPostingService {
 		}
 	}
 
+//	public List<String[]> getUserPostingTextLines(List<Bean> userPostings) {
+//		List<String[]> userPostingTextLines = new ArrayList<String[]>();
+//		UserPosting tmpUserPosting;
+//		String sep = System.getProperty("line.separator");
+//		for (int i = 0; i < userPostings.size(); i++) {
+//			tmpUserPosting = (UserPosting)userPostings.get(i);
+//			userPostingTextLines.add(tmpUserPosting.getText().split(sep));
+//		}
+//		return userPostingTextLines;
+//	}
 
 }

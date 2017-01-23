@@ -1,6 +1,8 @@
 package billboard.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -24,7 +26,7 @@ public class authorityFilter implements Filter {
 
 		String target = ((HttpServletRequest) request).getRequestURI();
 		HttpSession session = ((HttpServletRequest) request).getSession();
-
+		List<String> messages = new ArrayList<String>();
 		if (session == null) {
 			session = ((HttpServletRequest) request).getSession(true);
 			session.setAttribute("target", target);
@@ -33,8 +35,11 @@ public class authorityFilter implements Filter {
 			User loginUser = (User)session.getAttribute("loginUser");
 			if (loginUser != null) {
 				if (loginUser.getDepartmentId() != 1) {
+				messages.add("権限がありません");
+				session.setAttribute("errorMessages", messages);
 				session.setAttribute("target", target);
 				String contextPath = ((HttpServletRequest) request).getContextPath();
+
 				((HttpServletResponse) response).sendRedirect(contextPath);
 				return;
 				}

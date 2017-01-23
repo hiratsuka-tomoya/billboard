@@ -62,7 +62,7 @@ public class NewuserServlet extends HttpServlet {
 			user.setStopped(false);
 			new UserService().register(user);
 
-			response.sendRedirect("../management");
+			response.sendRedirect("./top");
 		} else {
 			session.setAttribute("errorMessages", messages);
 			response.sendRedirect("newuser");	//▲そのページでしか使わないからリクエスト.setAttributeするように変更して、リダイレクトだと消えるしページも移動しないからforwardに変更する
@@ -92,9 +92,8 @@ public class NewuserServlet extends HttpServlet {
 			if (!(loginId.length() >= 6 && loginId.length() <= 20)) {
 				messages.add("ログインIDは6文字以上20文字以内で入力してください");
 			}
-			// } else if (new UserService().getUser(loginId) != null) {
-			// messages.add("そのログインIDは登録できません");
-			// } else {▲既存ID
+		} else if(new UserService().getUserFromLoginId(loginId) != null) {
+			messages.add("そのログインIDは登録済みです");
 		} else {
 			session.setAttribute("loginId", loginId);
 		}

@@ -8,6 +8,7 @@ public class UserComment extends Bean {
 
 	private int id;
 	private String text;
+	private String[] textLines;
 	private int userId;
 	private int postingId;
 	private String userName;
@@ -19,11 +20,12 @@ public class UserComment extends Bean {
 		try {
 			this.setId(rs.getInt("id"));
 			this.setText(rs.getString("text"));
+			setTextLines(text.split(System.getProperty("line.separator")));
 			this.setUserId(rs.getInt("user_id"));
 			this.setPostingId(rs.getInt("posting_id"));
 			this.setUserName(rs.getString("user_name"));
-			this.setCreatedDate(rs.getDate("created_at"));
-			this.setUpdatedDate(rs.getDate("updated_at"));
+			this.setCreatedDate(rs.getTimestamp ("created_at"));
+			this.setUpdatedDate(rs.getTimestamp ("updated_at"));
 		} catch (SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -71,6 +73,14 @@ public class UserComment extends Bean {
 	}
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public String[] getTextLines() {
+		return textLines;
+	}
+
+	public void setTextLines(String[] textLines) {
+		this.textLines = textLines;
 	}
 
 }

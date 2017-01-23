@@ -25,7 +25,7 @@ public class ManagementServlet extends HttpServlet {
 			throws IOException, ServletException {
 
 		if (request.getSession().getAttribute("loginUser") == null) {
-			response.sendRedirect("login");
+			response.sendRedirect("Billboard/login");
 			return;
 		}
 

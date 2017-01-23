@@ -70,7 +70,7 @@ public class UserEditServlet extends HttpServlet {
 			new UserService().update(toUser,StringUtils.isNotEmpty(request.getParameter("password")));
 
 			request.getSession().removeAttribute("editUser");
-			response.sendRedirect("../management");
+			response.sendRedirect("./top");
 		} else {
 			request.setAttribute("errorMessages", messages);
 			request.getRequestDispatcher("/userEdit.jsp").forward(request, response);

@@ -108,6 +108,30 @@ public abstract class Dao {
 		}
 	}
 
+	public Bean getBean(Connection connection, String whereColumnName, String whereValue) {
+
+		PreparedStatement ps = null;
+		try {
+			String sql = "SELECT * FROM " + tableName + " WHERE " + whereColumnName + " = '" + whereValue +"'";
+
+			ps = connection.prepareStatement(sql);
+
+			ResultSet rs = ps.executeQuery();
+			List<Bean> beanList = toBeanList(rs);
+			if (beanList.isEmpty() == true) {
+				return null;
+			} else if (2 <= beanList.size()) {
+				throw new IllegalStateException("2 <= beanList.size()");
+			} else {
+				return beanList.get(0);
+			}
+		} catch (SQLException e) {
+			throw new SQLRuntimeException(e);
+		} finally {
+			close(ps);
+		}
+	}
+
 	protected List<Bean> toBeanList(ResultSet rs) throws SQLException {
 
 		List<Bean> ret = new ArrayList<Bean>();

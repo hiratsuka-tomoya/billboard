@@ -9,6 +9,7 @@ public class UserPosting extends Bean {
 	private int id;
 	private String title;
 	private String text;
+	private String[] textLines;
 	private String category;
 	private int userId;
 	private String userName;
@@ -21,11 +22,12 @@ public class UserPosting extends Bean {
 			this.setId(rs.getInt("id"));
 			this.setTitle(rs.getString("title"));
 			this.setText(rs.getString("text"));
+			setTextLines(text.split(System.getProperty("line.separator")));
 			this.setCategory(rs.getString("category"));
 			this.setUserId(rs.getInt("user_id"));
 			this.setUserName(rs.getString("user_name"));
-			this.setCreatedDate(rs.getDate("created_at"));
-			this.setUpdatedDate(rs.getDate("updated_at"));
+			this.setCreatedDate(rs.getTimestamp ("created_at"));
+			this.setUpdatedDate(rs.getTimestamp ("updated_at"));
 		} catch (SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
@@ -79,5 +81,13 @@ public class UserPosting extends Bean {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String[] getTextLines() {
+		return textLines;
+	}
+
+	public void setTextLines(String[] textLines) {
+		this.textLines = textLines;
 	}
 }

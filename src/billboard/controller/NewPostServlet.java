@@ -16,6 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import billboard.beans.Posting;
 import billboard.beans.User;
 import billboard.service.PostingService;
+import billboard.service.UserPostingService;
 
 @WebServlet(urlPatterns = { "/newpost" })
 public class NewpostServlet extends HttpServlet {
@@ -24,12 +25,18 @@ public class NewpostServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		HttpSession session = request.getSession();
+		session.removeAttribute("title");
+		session.removeAttribute("text");
+		session.removeAttribute("category");
 
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
 		if (loginUser == null) {
 			response.sendRedirect("login");
 		} else {
+			List<String> categories = new UserPostingService().getUserPostingCategories();
+			request.getSession().setAttribute("categories", categories);
 			request.getRequestDispatcher("newpost.jsp").forward(request, response);
 		}
 	}
@@ -51,10 +58,14 @@ public class NewpostServlet extends HttpServlet {
 			posting.setUserId(loginUser.getId());
 			new PostingService().register(posting);
 
+			session.removeAttribute("title");
+			session.removeAttribute("text");
+			session.removeAttribute("category");
+
 			response.sendRedirect("./");
 		} else {
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("newpost");
+			request.getRequestDispatcher("newpost.jsp").forward(request, response);
 		}
 	}
 
@@ -81,7 +92,7 @@ public class NewpostServlet extends HttpServlet {
 		}
 
 		if (StringUtils.isEmpty(category)) {
-			messages.add("カテゴリーを入力してください");
+			messages.add("カテゴリーを入力、もしくは選択してください");
 		} else if (category.length() > 10) {
 			messages.add("カテゴリーは10文字以下で入力してください");
 		}

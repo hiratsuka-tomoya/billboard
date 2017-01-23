@@ -2,15 +2,41 @@
 	pageEncoding="UTF-8"%>
 <%@page isELIgnored="false"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>ユーザー編集</title>
-<link href="../css/style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css" >
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<!--[if lt IE 9]>
+<script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<style type="text/css">
+<!--
+html, body{
+padding-top: 40px;
+height: 100%;
+margin: 0;
+}
+.wrapper {
+  min-height: 100%;
+  margin-bottom: -50px;
+}
+.footer,
+.push {
+  height: 50px;
+}
+-->
+</style>
 <script type="text/javascript">
 <!--
-
 function passwordCheck() {
 	var form = document.forms.userEditForm;
 	var result = form.password.value == form.checkPassword.value ? true : false;
@@ -18,15 +44,12 @@ function passwordCheck() {
 		var message = "確認用パスワードが一致しません"
 		window.alert(message);
 	}
-
 	return result;
 }
-
 function stopCheck(target) {
 	var result = confirm("[" + target + "]を停止しますか？" );
 	return result;
 }
-
 function init(branchId, departmentId) {
 console.log(branchId);
 	if ( typeof branchId !== "undefined") {
@@ -38,9 +61,7 @@ console.log(branchId);
 			}
 		}
 	}
-
 	changeDepartmentList();
-
 	if ( typeof departmentId !== "undefined") {
 		var select2 = document.getElementById("departmentId");
 		for(var i=0;i<select2.length;i++){
@@ -51,9 +72,7 @@ console.log(branchId);
 		}
 	}
 }
-
 function changeDepartmentList() {
-
 	var select1 = document.getElementById("branchId");
 	var select2 = document.getElementById("departmentId");
 	if (select1.options[select1.selectedIndex].value == 1) {
@@ -65,52 +84,105 @@ function changeDepartmentList() {
 		select2.options[1] = new Option("社員", 4);
 	}
 }
-
 //-->
 </script>
 </head>
 <body onLoad="init(${ branchId },${ departmentId })">
-<div class="heading">ユーザー編集</div>
-<div class="main-contents">
-<c:if test="${ not empty errorMessages }">
-	<div class="errorMessages">
-		<ul>
-			<c:forEach items="${errorMessages}" var="message">
-				<li><c:out value="${message}" />
-			</c:forEach>
-		</ul>
-	</div>
-	<c:remove var="errorMessages" scope="session"/>
-</c:if>
-<form action="userEdit" method="post" name="userEditForm" onSubmit = "return passwordCheck()"><br />
-	<label for="loginId">ログインID</label>
-	<input name="loginId" value="${ loginId }" id="loginId" maxlength="20" required/><br />
-	<label for="password">パスワード</label>
-	<input name="password" type="password" id="password" maxlength="255" /> <br />
-	<label for="checkPassword">パスワード（確認用）</label>
-	<input name="checkPassword" type="password" id="checkPassword" maxlength="255" /> <br />
-	<label for="name">ユーザー名</label>
-	<input name="name" value="${name}" id="name" maxlength="10" required/><br />
-	<div class="item">支店・部署</div>
-	<select name="branchId" id="branchId" onChange="changeDepartmentList()">
-	<option value="1">本社</option>
-	<option value="2">支店A</option>
-	<option value="3">支店B</option>
-	<option value="4">支店C</option>
-	<option value="5">支店D</option>
-	<option value="6">支店E</option>
-	<option value="7">支店F</option>
-	<option value="8">支店G</option>
-	</select>
-	<select name="departmentId" id="departmentId">
-	</select>
-	<input type="submit" value="登録" /> <br />
-	<a href="./top">戻る</a>
-</form>
-<div class="copyright">Copyright(c)Tomoya Hiratsuka</div>
+<div class="wrapper">
+<div id="navbar-main">
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="/billboard/management/top">管理者メニュー：</a>
+		</div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      <li><a href="/billboard/">ホーム</a></li>
+      <li><a href="/billboard/management/top">ユーザー管理</a></li>
+      <li class="active"><a href="/billboard/management/userEdit?editUserId=${ editUser.id }">ユーザー編集</a></li>
+      <li><a href="/billboard/management/newuser">ユーザー新規登録</a></li>
+      <li><a href="/billboard/logout">ログアウト</a></li>
+      </ul>
+    </div><!--/.nav-collapse -->
+    </div>
+  </div>
 </div>
+
+
+<div class="container">
+	<c:if test="${ not empty errorMessages }">
+			<div class="alert alert-warning" role="alert">
+				<div class="errorMessages">
+					<ul>
+						<c:forEach items="${errorMessages}" var="message">
+							<li><c:out value="${message}" />
+						</c:forEach>
+					</ul>
+				</div>
+				<c:remove var="errorMessages" scope="session"/>
+			</div>
+	</c:if>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			ユーザー編集
+		</div>
+		<div class="panel-body">
+			<form action="userEdit" method="post" name="userEditForm" onSubmit = "return passwordCheck()">
+				<div class="form-group">
+				<label for="loginId">ログインID</label>
+				<input name="loginId" class="form-control" value="${ loginId }" id="loginId" maxlength="20" required/>
+				</div>
+				<div class="form-group">
+				<label for="password">パスワード</label>
+				<input name="password" class="form-control" type="password" id="password" maxlength="255" />
+				</div>
+				<div class="form-group">
+				<label for="checkPassword">パスワード（確認用）</label>
+				<input name="checkPassword" class="form-control" type="password" id="checkPassword" maxlength="255" />
+				</div>
+				<div class="form-group">
+				<label for="name">ユーザー名</label>
+				<input name="name" class="form-control" value="${name}" id="name" maxlength="10" required/>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+					<div class="form-group">
+						<label for="name">支店</label>
+						<select name="branchId" class="form-control" id="branchId" onChange="changeDepartmentList()">
+						<option value="1">本社</option>
+						<option value="2">支店A</option>
+						<option value="3">支店B</option>
+						<option value="4">支店C</option>
+						<option value="5">支店D</option>
+						<option value="6">支店E</option>
+						<option value="7">支店F</option>
+						<option value="8">支店G</option>
+						</select>
+					</div>
+					</div>
+					<div class="col-sm-6">
+					<div class="form-group">
+						<label for="name">部署</label>
+						<select name="departmentId" class="form-control" id="departmentId">
+						</select>
+					</div>
+					</div>
+				</div>
+				<input type="submit" value="登録" /> <br />
+			</form>
+</div>
+</div>
+</div>
+<div class="push"></div>
+</div>
+<footer class="footer"><div class="copyright"><p class="text-center">Copyright(c)Tomoya Hiratsuka</p></div></footer>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </body>
-
-
-
 </html>

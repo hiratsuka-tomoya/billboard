@@ -3,6 +3,7 @@ package billboard.controller;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -30,10 +31,8 @@ public class TopServlet extends HttpServlet {
 			response.sendRedirect("login");
 			return;
 		}
-		String categories[] = new String[3];
-		categories[0] = "";
-		categories[1] = "テストカテゴリ１";
-		categories[2] = "テストカテゴリ2";
+
+		List<String> categories = new UserPostingService().getUserPostingCategories();
 
 		request.getSession().setAttribute("categories", categories);
 		List<String> messages = null;
@@ -45,7 +44,7 @@ public class TopServlet extends HttpServlet {
 
 		List<Bean> userPostings = null;
 		List<Bean> userComments = new UserCommentService().getUserComments();
-
+		Collections.reverse(userComments);
 		String refineCategory = request.getParameter("refineCategory");
 		String refineStartDate = request.getParameter("refineStartDate");
 		String refineEndDate = request.getParameter("refineEndDate");
@@ -61,7 +60,7 @@ public class TopServlet extends HttpServlet {
 			userPostings = new UserPostingService().getUserPostings();
 		}
 		request.setAttribute("errorMessages", messages);
-		request.setAttribute("refineCategory", refineCategory);
+		request.getSession().setAttribute("refineCategory", refineCategory);
 		request.getSession().setAttribute("userPostings", userPostings);
 		request.getSession().setAttribute("userComments", userComments);
 
@@ -75,7 +74,7 @@ public class TopServlet extends HttpServlet {
 		if (StringUtils.isNotEmpty(refineStartDate)) {
 			try {
 			    DateUtils.parseDateStrictly(refineStartDate, new String[] {"yyyy/MM/dd"});
-			    request.setAttribute("refineStartDate", refineStartDate);
+			    request.getSession().setAttribute("refineStartDate", refineStartDate);
 			} catch (ParseException e) {
 				messages.add("日付は yyyy/mm/dd 形式で入力してください");
 			}
