@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import billboard.beans.User;
+import billboard.service.UserService;
 
 @WebFilter("/*")
 public class LoginFilter implements Filter {
@@ -33,18 +34,21 @@ public class LoginFilter implements Filter {
 //				session.setAttribute("target", target);
 				((HttpServletResponse) response).sendRedirect("login");
 			} else {
-				User loginCheck = (User)session.getAttribute("loginUser");
-				if (loginCheck == null) {
+				User loginUser = (User)session.getAttribute("loginUser");
+				if (loginUser == null) {
 //					session.setAttribute("target", target);
 					((HttpServletResponse) response).sendRedirect("login");
 					return;
-				} else if (loginCheck.isStopped() == true) {
+				} else if (loginUser.isStopped() == true) {
 					messages.add("アカウントが停止されています");
 					session.setAttribute("errorMessages", messages);
 					session.removeAttribute("loginUser");
 //					session.setAttribute("target", target);
 					((HttpServletResponse) response).sendRedirect("login");
 					return;
+				} else {
+					loginUser = (User)new UserService().getUser(loginUser.getId());
+					session.setAttribute("loginUser", loginUser);
 				}
 			}
 		} else {

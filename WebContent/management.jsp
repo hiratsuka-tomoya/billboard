@@ -13,7 +13,6 @@
 <title>ユーザー管理</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css" >
-<link href="../css/style.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
 <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -27,8 +26,6 @@ margin: 0;
 }
 .wrapper {
   min-height: 100%;
-  /* フッタの高さと等しいネガティブマージン */
-  /* また最後の子要素の潜在的なマージンとしても機能 */
   margin-bottom: -50px;
 }
 .footer,
@@ -46,6 +43,10 @@ function recoverCheck(target) {
 	var result = confirm("[" + target + "]を復帰しますか？" );
 	return result;
 }
+function deleteCheck(target) {
+	var result = confirm("[" + target + "]を削除しますか？" );
+	return result;
+}
 </script>
 </head>
 <body>
@@ -53,6 +54,7 @@ function recoverCheck(target) {
 <div id="navbar-main">
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
+    <div class="row">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
@@ -60,19 +62,25 @@ function recoverCheck(target) {
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/billboard/management/top">管理者メニュー：</a>
 		</div>
     <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-      <li><a href="/billboard/">ホーム</a></li>
-      <li class="active"> <a href="/billboard/management/top">ユーザー管理</a></li>
-      <li> <a href="/billboard/management/newuser">ユーザー新規登録</a></li>
-      <li> <a href="/billboard/logout">ログアウト</a></li>
-      </ul>
+		<ul class="nav navbar-nav">
+		<li><a href="/billboard/">ホーム</a></li>
+		<li><a href="/billboard/newpost">新規投稿</a></li>
+		<c:if test="${ loginUser.departmentId == 1 }">
+		<li class="active"> <a href="/billboard/management/top">ユーザー管理</a></li>
+		<li> <a href="/billboard/management/newuser">ユーザー新規登録</a></li>
+		</c:if>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		<li> <a href="/billboard/logout">ログアウト</a></li>
+		</ul>
     </div><!--/.nav-collapse -->
+    </div>
     </div>
   </div>
 </div>
+<div class="container">
 <c:if test="${ not empty errorMessages }">
 	<div class="errorMessages">
 		<ul>
@@ -83,8 +91,8 @@ function recoverCheck(target) {
 	</div>
 	<c:remove var="errorMessages" scope="session"/>
 </c:if>
-<div class="container">
-	<div class="panel panel-default">
+
+	<div class="panel panel-primary">
 		<div class="panel-heading">
 			ユーザー一覧
 		</div>
@@ -97,23 +105,24 @@ function recoverCheck(target) {
 		        <th>部署</th>
 		        <th>状態</th>
 		        <th>停止/復帰</th>
+		        <th>削除</th>
 		      </tr>
 		    </thead>
 		    <tbody>
 			<c:forEach items="${ users }" var="user">
 			  <tr>
 			    <td class="col-md-1"><c:out value="${user.id}" /></td>
-			    <td class="col-md-3"><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
+			    <td class="col-md-4"><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
 			    <td class="col-md-2">
 			    	<c:choose>
 						<c:when test="${user.branchId == 1}">本社</c:when>
 						<c:when test="${user.branchId == 2}">支店A</c:when>
 						<c:when test="${user.branchId == 3}">支店B</c:when>
 						<c:when test="${user.branchId == 4}">支店C</c:when>
-						<c:when test="${user.branchId == 4}">支店D</c:when>
-						<c:when test="${user.branchId == 4}">支店E</c:when>
-						<c:when test="${user.branchId == 4}">支店F</c:when>
-						<c:when test="${user.branchId == 4}">支店G</c:when>
+						<c:when test="${user.branchId == 5}">支店D</c:when>
+						<c:when test="${user.branchId == 6}">支店E</c:when>
+						<c:when test="${user.branchId == 7}">支店F</c:when>
+						<c:when test="${user.branchId == 8}">支店G</c:when>
 					</c:choose>
 			    </td>
 			    <td class="col-md-2">
@@ -124,26 +133,35 @@ function recoverCheck(target) {
 						<c:when test="${user.departmentId == 4}">社員</c:when>
 					</c:choose>
 			    </td>
-			    <td class="col-md-2">
+			    <td class="col-md-1">
 			    	<c:if test="${user.isStopped() == true}">
-						<c:out value="停止中" />
+						<span class="label label-default"><c:out value="停止中" /></span>
 				    </c:if>
 				    <c:if test="${user.isStopped() == false}">
-			    		<c:out value="稼働中" />
+			    		<span class="label label-primary"><c:out value="稼働中" /></span>
 				    </c:if>
 			    </td>
-		      	<td class="col-md-2">
+		      	<td class="col-md-1">
 				    <form action="./top" method="post">
 						<c:if test="${ user.id == loginUser.id }">---</c:if>
 						<c:if test="${ user.id != loginUser.id }">
 						    <c:if test="${user.isStopped() == false}">
 						    	<input type="hidden" name="stopUserId" value="${user.id}">
-						    	<input type="submit" value="停止" onClick="return stopCheck('${user.name}')"></input>
+						    	<button type="submit" class="btn btn-default btn-sm" onClick="return stopCheck('${user.name}')">停止</button>
 						    </c:if>
 						    <c:if test="${user.isStopped() == true}">
 								<input type="hidden" name="recoverUserId" value="${user.id}">
-						    	<input type="submit" value="復帰" onClick="return recoverCheck('${user.name}')"></input>
+								<button type="submit" class="btn btn-default btn-sm" onClick="return recoverCheck('${user.name}')">復帰</button>
 						    </c:if>
+				    	</c:if>
+				    </form>
+			    </td>
+			    <td class="col-md-1">
+				    <form action="deleteUser" method="post">
+						<c:if test="${ user.id == loginUser.id }">---</c:if>
+						<c:if test="${ user.id != loginUser.id }">
+								<input type="hidden" name="deleteUserId" value="${user.id}">
+						    	<button type="submit" class="btn btn-default btn-sm" onClick="return deleteCheck('${user.name}')">削除</button>
 				    	</c:if>
 				    </form>
 			    </td>
@@ -153,8 +171,8 @@ function recoverCheck(target) {
 		</table>
 	</div>
 </div>
-<div class="push"></div>
 </div>
+<div class="push"></div>
 <footer class="footer"><div class="copyright"><p class="text-center">Copyright(c)Tomoya Hiratsuka</p></div></footer>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>

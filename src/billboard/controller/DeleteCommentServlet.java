@@ -14,6 +14,7 @@ import org.apache.commons.lang.StringUtils;
 
 import billboard.beans.User;
 import billboard.service.CommentService;
+import billboard.service.UserService;
 
 @WebServlet(urlPatterns = { "/deletecomment" })
 public class DeleteCommentServlet extends HttpServlet {
@@ -43,13 +44,16 @@ public class DeleteCommentServlet extends HttpServlet {
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
 		String commentUserId = request.getParameter("commentUserId");
+		User commentUser = (User) new UserService().getUser(Integer.parseInt(commentUserId));
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
-		if (loginUser.getDepartmentId() != 1)  {
-			if (Integer.parseInt(commentUserId) != loginUser.getId()) {
-				messages.add("他のユーザーのコメントのため削除できません");
-			}
+		if (!(loginUser.getDepartmentId() == 2 ||
+				(loginUser.getDepartmentId() == 3 &&
+				(loginUser.getBranchId() == commentUser.getBranchId() &&
+				 commentUser.getDepartmentId() == 4)))) {
+			messages.add("権限がありません");
 		}
+
 		return (messages.size() == 0);
 
 	}

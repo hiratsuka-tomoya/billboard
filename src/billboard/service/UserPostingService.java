@@ -124,15 +124,4 @@ public class UserPostingService {
 		}
 	}
 
-//	public List<String[]> getUserPostingTextLines(List<Bean> userPostings) {
-//		List<String[]> userPostingTextLines = new ArrayList<String[]>();
-//		UserPosting tmpUserPosting;
-//		String sep = System.getProperty("line.separator");
-//		for (int i = 0; i < userPostings.size(); i++) {
-//			tmpUserPosting = (UserPosting)userPostings.get(i);
-//			userPostingTextLines.add(tmpUserPosting.getText().split(sep));
-//		}
-//		return userPostingTextLines;
-//	}
-
 }

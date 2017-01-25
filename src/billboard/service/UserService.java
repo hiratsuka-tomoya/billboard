@@ -78,21 +78,6 @@ public class UserService {
 		}
 	}
 
-//	private void setDefaultIcon(User user) {
-//
-//		InputStream is = null;
-//		try {
-//			long randomNum = System.currentTimeMillis() % 5;
-//			String filePath = "/duke_" + randomNum + ".jpg";
-//			is = UserService.class.getResourceAsStream(filePath);
-//			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//			StreamUtil.copy(is, baos);
-//			user.setIcon(baos.toByteArray());
-//		} finally {
-//			close(is);
-//		}
-//	}
-
 	public List<Bean> getUsers() {
 
 		int MAX_NUM = 1000;
@@ -190,28 +175,27 @@ public class UserService {
 			close(connection);
 		}
 	}
-//
-//	public User getUser(String accountOrEmail) {
-//
-//		Connection connection = null;
-//		try {
-//			connection = getConnection();
-//
-//			UserDao userDao = new UserDao();
-//			User user = userDao.getUser(connection, accountOrEmail);
-//
-//			commit(connection);
-//
-//			return user;
-//		} catch (RuntimeException e) {
-//			rollback(connection);
-//			throw e;
-//		} catch (Error e) {
-//			rollback(connection);
-//			throw e;
-//		} finally {
-//			close(connection);
-//		}
-//	}
+
+	public Boolean deleteUser(int id) {
+
+		Connection connection = null;
+		try {
+			connection = getConnection();
+
+			Boolean ret = new UserDao().deleteBeans(connection, id);
+
+			commit(connection);
+
+			return ret;
+		} catch (RuntimeException e) {
+			rollback(connection);
+			throw e;
+		} catch (Error e) {
+			rollback(connection);
+			throw e;
+		} finally {
+			close(connection);
+		}
+	}
 
 }

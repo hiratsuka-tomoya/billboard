@@ -13,7 +13,6 @@
 <title>ユーザー登録</title>
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/blitzer/jquery-ui.css" >
-<link href="../css/style.css" rel="stylesheet" type="text/css">
 <!--[if lt IE 9]>
 <script src="//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -36,6 +35,15 @@ margin: 0;
 -->
 </style>
 <script type="text/javascript">
+function passwordCheck() {
+	var form = document.forms.userRegisterForm;
+	var result = form.password.value == form.checkPassword.value ? true : false;
+	if (result == false) {
+		var message = "確認用パスワードが一致しません"
+		window.alert(message);
+	}
+	return result;
+}
 function init(branchId, departmentId) {
 	if ( typeof branchId !== "undefined") {
 		var select1 = document.getElementById("branchId");
@@ -76,6 +84,7 @@ function changeDepartmentList() {
 <div id="navbar-main">
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
+    <div class="row">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
@@ -83,16 +92,21 @@ function changeDepartmentList() {
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/billboard/management/top">管理者メニュー：</a>
 		</div>
     <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-      <li><a href="/billboard/">ホーム</a></li>
-      <li><a href="/billboard/management/top">ユーザー管理</a></li>
-      <li class="active"> <a href="/billboard/management/newuser">ユーザー新規登録</a></li>
-      <li> <a href="/billboard/logout">ログアウト</a></li>
-      </ul>
+		<ul class="nav navbar-nav">
+		<li><a href="/billboard/">ホーム</a></li>
+		<li><a href="/billboard/newpost">新規投稿</a></li>
+		<c:if test="${ loginUser.departmentId == 1 }">
+		<li> <a href="/billboard/management/top">ユーザー管理</a></li>
+		<li class="active"> <a href="/billboard/management/newuser">ユーザー新規登録</a></li>
+		</c:if>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		<li> <a href="/billboard/logout">ログアウト</a></li>
+		</ul>
     </div><!--/.nav-collapse -->
+    </div>
     </div>
   </div>
 </div>
@@ -109,23 +123,27 @@ function changeDepartmentList() {
 				<c:remove var="errorMessages" scope="session"/>
 			</div>
 	</c:if>
-	<div class="panel panel-default">
+	<div class="panel panel-primary">
 		<div class="panel-heading">
 			ユーザー新規登録
 		</div>
 		<div class="panel-body">
-			<form action="newuser" method="post">
+			<form action="newuser" method="post" name="userRegisterForm" onSubmit = "return passwordCheck()">
 				<div class="form-group">
 				<label for="loginId">ログインID</label>
-				<input name="loginId" class="form-control" value="${loginId}" id="loginId"/>
+				<input name="loginId" class="form-control" value="${loginId}" id="loginId"  placeholder="（半角英数字6文字以上20文字以下）" maxlength="20" required/>
 				</div>
 				<div class="form-group">
 				<label for="password">パスワード</label>
-				<input name="password" class="form-control" type="password" id="password"/>
+				<input name="password" class="form-control" type="password" id="password"  placeholder="（記号を含む半角英数字6文字以上255文字以下）" maxlength="255" required/>
+				</div>
+				<div class="form-group">
+				<label for="checkPassword">パスワード（確認用）</label>
+				<input name="checkPassword" class="form-control" type="password" id="checkPassword"  placeholder="（記号を含む半角英数字6文字以上255文字以下）" maxlength="255" required/>
 				</div>
 				<div class="form-group">
 				<label for="name">ユーザー名</label>
-				<input name="name" class="form-control" value="${name}" id="name"/>
+				<input name="name" class="form-control" value="${name}" id="name"  placeholder="（10文字以下）" maxlength="10" required/>
 				</div>
 				<div class="row">
 					<div class="col-sm-6">
@@ -156,8 +174,8 @@ function changeDepartmentList() {
 		</div>
 	</div>
 </div>
-<div class="push"></div>
 </div>
+<div class="push"></div>
 <footer class="footer"><div class="copyright"><p class="text-center">Copyright(c)Tomoya Hiratsuka</p></div></footer>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>

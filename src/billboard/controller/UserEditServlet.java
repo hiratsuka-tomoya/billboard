@@ -37,16 +37,15 @@ public class UserEditServlet extends HttpServlet {
 			try {
 				editUserId = Integer.parseInt(request.getParameter("editUserId"));
 			} catch (Exception e) {
-				messages.add("予期せぬエラーが発生しました");
-				response.sendRedirect("./");
+				response.sendRedirect("/billboard/management/top");
 				return;
 			}
 			User editUser = (User) new UserService().getUser(editUserId);
 			request.getSession().setAttribute("editUser", editUser);
-			request.getSession().setAttribute("loginId", editUser.getLoginId());
-			request.getSession().setAttribute("name", editUser.getName());
-			request.getSession().setAttribute("branchId", editUser.getBranchId());
-			request.getSession().setAttribute("departmentId", editUser.getDepartmentId());
+			request.setAttribute("loginId", editUser.getLoginId());
+			request.setAttribute("name", editUser.getName());
+			request.setAttribute("branchId", editUser.getBranchId());
+			request.setAttribute("departmentId", editUser.getDepartmentId());
 			request.getRequestDispatcher("/userEdit.jsp").forward(request, response);
 		}
 	}
@@ -84,12 +83,13 @@ public class UserEditServlet extends HttpServlet {
 		String name = request.getParameter("name");
 		int branchId = Integer.valueOf(request.getParameter("branchId"));
 		int departmentId = Integer.valueOf(request.getParameter("departmentId"));
+		User editUser = (User)request.getSession().getAttribute("editUser");
 
 		session.removeAttribute("loginId");
 		session.removeAttribute("name");
 
-		session.setAttribute("branchId", branchId);
-		session.setAttribute("departmentId", departmentId);
+		request.setAttribute("branchId", branchId);
+		request.setAttribute("departmentId", departmentId);
 
 		if (StringUtils.isEmpty(loginId)) {
 			messages.add("ログインIDを入力してください");
@@ -100,11 +100,10 @@ public class UserEditServlet extends HttpServlet {
 			if (!(loginId.length() >= 6 && loginId.length() <= 20)) {
 				messages.add("ログインIDは6文字以上20文字以内で入力してください");
 			}
-			// } else if (new UserService().getUser(loginId) != null) {
-			// messages.add("そのログインIDは登録できません");
-			// } else {▲既存ID
-		} else {
-			session.setAttribute("loginId", loginId);
+		} else if(!editUser.getLoginId().equals(loginId)) {
+			if (new UserService().getUserFromLoginId(loginId) != null) {
+				messages.add("そのログインIDは登録済みです");
+			}
 		}
 
 		if (StringUtils.isNotEmpty(password)) {
@@ -122,9 +121,10 @@ public class UserEditServlet extends HttpServlet {
 			messages.add("ユーザー名を入力してください");
 		} else if (!(name.length() <= 10)) {
 			messages.add("ユーザー名は10文字以下で入力してください");
-		} else {
-			session.setAttribute("name", name);
 		}
+
+		request.setAttribute("loginId", loginId);
+		request.setAttribute("name", name);
 
 		return (messages.size() == 0);
 

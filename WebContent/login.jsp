@@ -52,7 +52,7 @@ margin: 0;
 			</div>
 	</c:if>
 <div class="row">
-	<div class="panel panel-default">
+	<div class="panel panel-primary">
 		<div class="panel-heading">
 			ログイン
 		</div>

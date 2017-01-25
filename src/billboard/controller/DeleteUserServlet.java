@@ -13,11 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import billboard.beans.User;
-import billboard.service.PostingService;
 import billboard.service.UserService;
 
-@WebServlet(urlPatterns = { "/deleteposting" })
-public class DeletePostingServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/management/deleteUser" })
+public class DeleteUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -26,29 +25,27 @@ public class DeletePostingServlet extends HttpServlet {
 
 		List<String> messages = new ArrayList<String>();
 
-		String postingId = request.getParameter("postingId");
+		String deleteUserId = request.getParameter("deleteUserId");
 
-		if (StringUtils.isEmpty(postingId)) {
+		if (StringUtils.isEmpty(deleteUserId)) {
 			messages.add("予期せぬエラーが発生しました");
 			request.setAttribute("errorMessages", messages);
 			response.sendRedirect("./");
 		}
 
 		if (isValid(request, messages) == true) {
-			new PostingService().deleteUserPosting(Integer.parseInt(postingId));
+			new UserService().deleteUser(Integer.parseInt(deleteUserId));
 		}
 
 		request.getSession().setAttribute("errorMessages", messages);
-		response.sendRedirect("./");
+		response.sendRedirect("/billboard/management/top");
 	}
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
-		String postingUserId = request.getParameter("postingUserId");
-		User postingUser = (User) new UserService().getUser(Integer.parseInt(postingUserId));
+		String deleteUserId = request.getParameter("deleteUserId");
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
-		if (!(loginUser.getDepartmentId() == 2 ||
-				(loginUser.getDepartmentId() == 3 && (loginUser.getBranchId() == postingUser.getBranchId())))) {
+		if (Integer.parseInt(deleteUserId) == loginUser.getId()) {
 			messages.add("権限がありません");
 		}
 

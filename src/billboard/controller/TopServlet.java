@@ -1,9 +1,11 @@
 package billboard.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -60,32 +62,49 @@ public class TopServlet extends HttpServlet {
 			userPostings = new UserPostingService().getUserPostings();
 		}
 		request.setAttribute("errorMessages", messages);
-		request.getSession().setAttribute("refineCategory", refineCategory);
+		request.setAttribute("refineCategory", refineCategory);
 		request.getSession().setAttribute("userPostings", userPostings);
 		request.getSession().setAttribute("userComments", userComments);
-
+	    request.setAttribute("refineStartDate", refineStartDate);
+	    request.setAttribute("refineEndDate", refineEndDate);
 		request.getRequestDispatcher("/top.jsp").forward(request, response);
 	}
 
 	private boolean isValidRefine(HttpServletRequest request, List<String> messages) {
 		String refineStartDate = request.getParameter("refineStartDate");
 		String refineEndDate = request.getParameter("refineEndDate");
+		String refineCategory = request.getParameter("refineCategory");
+		List<String> categoryList = new ArrayList<String>();
+		categoryList = (List<String>) request.getSession().getAttribute("categories");
+		Date dateFrom = null;
+		Date dateTo = null;
 
+		if (StringUtils.isNotEmpty(refineCategory)) {
+			if (!categoryList.contains(refineCategory)) {
+				messages.add("存在しないカテゴリーです");
+			}
+		}
 		if (StringUtils.isNotEmpty(refineStartDate)) {
 			try {
 			    DateUtils.parseDateStrictly(refineStartDate, new String[] {"yyyy/MM/dd"});
-			    request.getSession().setAttribute("refineStartDate", refineStartDate);
+			    dateFrom = DateFormat.getDateInstance().parse(refineStartDate);
 			} catch (ParseException e) {
-				messages.add("日付は yyyy/mm/dd 形式で入力してください");
+				messages.add("絞込み開始日が不正です");
 			}
 		}
 		if (StringUtils.isNotEmpty(refineEndDate)) {
 			try {
 			    DateUtils.parseDateStrictly(refineEndDate, new String[] {"yyyy/MM/dd"});
-			    request.setAttribute("refineEndDate", refineEndDate);
+			    dateTo = DateFormat.getDateInstance().parse(refineEndDate);
 			} catch (ParseException e) {
-				messages.add("日付は yyyy/mm/dd 形式で入力してください");
+				messages.add("絞込み末日が不正です");
 			}
+		}
+		if (dateFrom != null && dateTo != null) {
+			if (dateFrom.compareTo(dateTo) > 0) {
+				messages.add("絞込み末日より未来の開始日が指定されています");
+			}
+
 		}
 
 		return (messages.size() == 0);

@@ -50,14 +50,17 @@ margin: 0;
 			</button>
 		</div>
     <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-      <li><a href="/billboard/">ホーム</a></li>
-      <li class="active"> <a href="/billboard/newpost">新規投稿</a></li>
-      <li> <a href="/billboard/logout">ログアウト</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-      <li > <a href="/billboard/management/top">ユーザー管理</a></li>
-      </ul>
+		<ul class="nav navbar-nav">
+		<li><a href="/billboard/">ホーム</a></li>
+		<li class="active"> <a href="/billboard/newpost">新規投稿</a></li>
+		<c:if test="${ loginUser.departmentId == 1 }">
+		<li><a href="/billboard/management/top">ユーザー管理</a></li>
+		<li><a href="/billboard/management/newuser">ユーザー新規登録</a></li>
+		</c:if>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		<li> <a href="/billboard/logout">ログアウト</a></li>
+		</ul>
     </div><!--/.nav-collapse -->
     </div>
     </div>
@@ -76,6 +79,7 @@ margin: 0;
 				<c:remove var="errorMessages" scope="session"/>
 			</div>
 	</c:if>
+
 	<div class="panel panel-primary">
 	<div class="panel-heading">
 		新規投稿
@@ -84,22 +88,24 @@ margin: 0;
 	<form action="newpost" method="post">
 	<div class="form-group">
 	<label for="title">件名</label>
-	<input type="text" class="form-control" id="InputText" placeholder="（50文字まで）" name="title" value="${title}" size="50" maxlength="50" />
+	<input type="text" class="form-control" id="InputText" placeholder="（50文字まで）" name="title" value="${title}" size="50" maxlength="50" required/>
 	</div>
+
 	<div class="form-group">
 	<label for="text">本文</label>
-	<textarea class="form-control" id="InputTextarea" placeholder="（1000文字まで）"  name="text" class="textarea" rows="10" cols="100" maxlength="1000" >${text}</textarea>
+	<textarea class="form-control" id="InputTextarea" placeholder="（1000文字まで）"  name="text" class="textarea" rows="10" cols="100" maxlength="1000" required>${text}</textarea>
 	</div>
 
 	<div class="form-group">
 	<label for="category">カテゴリー</label>
-	<input type="text" class="form-control" id="InputText" name="category" placeholder="新規入力もしくは既存カテゴリーから選択 （10文字まで）" value="${category}" autocomplete="off" list="categoryList" maxlength="10" />
+	<input type="text" class="form-control" id="InputText" name="category" placeholder="新規入力もしくは既存カテゴリーから選択 （10文字まで）" value="${category}" autocomplete="off" list="categoryList" maxlength="10" required/>
 	<datalist id="categoryList">
 	<c:forEach items="${categories}" var="category">
 		<option value="${category}">
 	</c:forEach>
 	</datalist>
 	</div>
+
 	<input type="submit" value="投稿" /> <br />
 	</form>
 	</div>

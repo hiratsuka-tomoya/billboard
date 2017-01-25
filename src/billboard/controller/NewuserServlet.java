@@ -27,7 +27,7 @@ public class NewuserServlet extends HttpServlet {
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
 		if (loginUser == null) {
-//			response.sendRedirect("login");
+			response.sendRedirect("login");
 		} else if (loginUser.getDepartmentId() != 1) {
 			List<String> messages = new ArrayList<String>();
 			messages.add("権限がありません");
@@ -35,10 +35,10 @@ public class NewuserServlet extends HttpServlet {
 			response.sendRedirect("./");
 		} else {
 			if (request.getSession().getAttribute("branchId") == null) {
-				request.getSession().setAttribute("branchId", 1);
+				request.setAttribute("branchId", 1);
 			}
 			if (request.getSession().getAttribute("departmentId") == null) {
-				request.getSession().setAttribute("departmentId", 1);
+				request.setAttribute("departmentId", 1);
 			}
 			request.getRequestDispatcher("/newuser.jsp").forward(request, response);
 		}
@@ -65,23 +65,16 @@ public class NewuserServlet extends HttpServlet {
 			response.sendRedirect("./top");
 		} else {
 			session.setAttribute("errorMessages", messages);
-			response.sendRedirect("newuser");	//▲そのページでしか使わないからリクエスト.setAttributeするように変更して、リダイレクトだと消えるしページも移動しないからforwardに変更する
+			request.getRequestDispatcher("/newuser.jsp").forward(request, response);
 		}
 	}
 
 	private boolean isValid(HttpServletRequest request, List<String> messages) {
-		HttpSession session = request.getSession();
 		String loginId = request.getParameter("loginId");
 		String password = request.getParameter("password");
 		String name = request.getParameter("name");
 		int branchId = Integer.valueOf(request.getParameter("branchId"));
 		int departmentId = Integer.valueOf(request.getParameter("departmentId"));
-
-		session.removeAttribute("loginId");
-		session.removeAttribute("name");
-
-		session.setAttribute("branchId", branchId);
-		session.setAttribute("departmentId", departmentId);
 
 		if (StringUtils.isEmpty(loginId)) {
 			messages.add("ログインIDを入力してください");
@@ -94,8 +87,6 @@ public class NewuserServlet extends HttpServlet {
 			}
 		} else if(new UserService().getUserFromLoginId(loginId) != null) {
 			messages.add("そのログインIDは登録済みです");
-		} else {
-			session.setAttribute("loginId", loginId);
 		}
 
 		if (StringUtils.isEmpty(password)) {
@@ -113,10 +104,11 @@ public class NewuserServlet extends HttpServlet {
 			messages.add("ユーザー名を入力してください");
 		} else if (!(name.length() >= 1 && name.length() <= 10)) {
 			messages.add("ユーザー名は10文字以下で入力してください");
-		} else {
-			session.setAttribute("name", name);
 		}
-
+		request.setAttribute("loginId", loginId);
+		request.setAttribute("name", name);
+		request.setAttribute("branchId", branchId);
+		request.setAttribute("departmentId", departmentId);
 		return (messages.size() == 0);
 
 	}

@@ -92,6 +92,7 @@ function changeDepartmentList() {
 <div id="navbar-main">
   <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
+    <div class="row">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
@@ -99,21 +100,24 @@ function changeDepartmentList() {
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/billboard/management/top">管理者メニュー：</a>
 		</div>
     <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-      <li><a href="/billboard/">ホーム</a></li>
-      <li><a href="/billboard/management/top">ユーザー管理</a></li>
-      <li class="active"><a href="/billboard/management/userEdit?editUserId=${ editUser.id }">ユーザー編集</a></li>
-      <li><a href="/billboard/management/newuser">ユーザー新規登録</a></li>
-      <li><a href="/billboard/logout">ログアウト</a></li>
-      </ul>
+		<ul class="nav navbar-nav">
+		<li><a href="/billboard/">ホーム</a></li>
+		<li><a href="/billboard/newpost">新規投稿</a></li>
+		<c:if test="${ loginUser.departmentId == 1 }">
+		<li> <a href="/billboard/management/top">ユーザー管理</a></li>
+		<li> <a href="/billboard/management/newuser">ユーザー新規登録</a></li>
+		</c:if>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+		<li> <a href="/billboard/logout">ログアウト</a></li>
+		</ul>
     </div><!--/.nav-collapse -->
+    </div>
     </div>
   </div>
 </div>
-
 
 <div class="container">
 	<c:if test="${ not empty errorMessages }">
@@ -128,7 +132,7 @@ function changeDepartmentList() {
 				<c:remove var="errorMessages" scope="session"/>
 			</div>
 	</c:if>
-	<div class="panel panel-default">
+	<div class="panel panel-primary">
 		<div class="panel-heading">
 			ユーザー編集
 		</div>
@@ -136,21 +140,22 @@ function changeDepartmentList() {
 			<form action="userEdit" method="post" name="userEditForm" onSubmit = "return passwordCheck()">
 				<div class="form-group">
 				<label for="loginId">ログインID</label>
-				<input name="loginId" class="form-control" value="${ loginId }" id="loginId" maxlength="20" required/>
+				<input name="loginId" class="form-control" value="${ loginId }" id="loginId" placeholder="（半角英数字6文字以上20文字以下）" maxlength="20" required/>
 				</div>
 				<div class="form-group">
 				<label for="password">パスワード</label>
-				<input name="password" class="form-control" type="password" id="password" maxlength="255" />
+				<input name="password" class="form-control" type="password" placeholder="（記号を含む半角英数字6文字以上255文字以下）" id="password" maxlength="255" />
 				</div>
 				<div class="form-group">
 				<label for="checkPassword">パスワード（確認用）</label>
-				<input name="checkPassword" class="form-control" type="password" id="checkPassword" maxlength="255" />
+				<input name="checkPassword" class="form-control" type="password" placeholder="（記号を含む半角英数字6文字以上255文字以下）" id="checkPassword" maxlength="255" />
 				</div>
 				<div class="form-group">
 				<label for="name">ユーザー名</label>
-				<input name="name" class="form-control" value="${name}" id="name" maxlength="10" required/>
+				<input name="name" class="form-control" value="${name}" id="name" placeholder="（10文字以下）" maxlength="10" required/>
 				</div>
 				<div class="row">
+				<c:if test="${ loginUser.id != editUser.id }">
 					<div class="col-sm-6">
 					<div class="form-group">
 						<label for="name">支店</label>
@@ -173,14 +178,31 @@ function changeDepartmentList() {
 						</select>
 					</div>
 					</div>
+				</c:if>
+				<c:if test="${ loginUser.id == editUser.id }">
+					<div class="col-sm-6">
+					<div class="form-group">
+						<label for="name">支店</label>
+						<input name="" class="form-control" type="text" value="本社" readonly="readonly" />
+						<input name="branchId" id="branchId" type="hidden" value="1" />
+					</div>
+					</div>
+					<div class="col-sm-6">
+					<div class="form-group">
+						<label for="name">部署</label>
+						<input name="" class="form-control" type="text" value="総務人事担当者" readonly="readonly" />
+						<input name="departmentId" id="departmentId" type="hidden" value="1" />
+					</div>
+					</div>
+				</c:if>
 				</div>
 				<input type="submit" value="登録" /> <br />
 			</form>
 </div>
 </div>
 </div>
-<div class="push"></div>
 </div>
+<div class="push"></div>
 <footer class="footer"><div class="copyright"><p class="text-center">Copyright(c)Tomoya Hiratsuka</p></div></footer>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
