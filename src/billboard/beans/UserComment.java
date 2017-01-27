@@ -12,7 +12,25 @@ public class UserComment extends Bean {
 	private int userId;
 	private int postingId;
 	private String userName;
+	private int userDepartmentId;
+	private int userBranchId;
 	private Date createdDate;
+	public int getUserDepartmentId() {
+		return userDepartmentId;
+	}
+
+	public void setUserDepartmentId(int userDepartmentId) {
+		this.userDepartmentId = userDepartmentId;
+	}
+
+	public int getUserBranchId() {
+		return userBranchId;
+	}
+
+	public void setUserBranchId(int userBranchId) {
+		this.userBranchId = userBranchId;
+	}
+
 	private Date updatedDate;
 
 	@Override
@@ -24,6 +42,8 @@ public class UserComment extends Bean {
 			this.setUserId(rs.getInt("user_id"));
 			this.setPostingId(rs.getInt("posting_id"));
 			this.setUserName(rs.getString("user_name"));
+			this.setUserBranchId(rs.getInt("user_branch_id"));
+			this.setUserDepartmentId(rs.getInt("user_department_id"));
 			this.setCreatedDate(rs.getTimestamp ("created_at"));
 			this.setUpdatedDate(rs.getTimestamp ("updated_at"));
 		} catch (SQLException e) {

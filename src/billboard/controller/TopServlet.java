@@ -58,6 +58,9 @@ public class TopServlet extends HttpServlet {
 				) {
 			userPostings = new UserPostingService().getRefinedUserPostings(refineCategory, refineStartDate,
 					refineEndDate);
+			if (userPostings.size() == 0) {
+				messages.add("指定条件の投稿はありません");
+			}
 		} else {
 			userPostings = new UserPostingService().getUserPostings();
 		}

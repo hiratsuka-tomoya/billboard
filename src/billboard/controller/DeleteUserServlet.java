@@ -20,8 +20,8 @@ public class DeleteUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		List<String> messages = new ArrayList<String>();
 
@@ -45,6 +45,13 @@ public class DeleteUserServlet extends HttpServlet {
 		String deleteUserId = request.getParameter("deleteUserId");
 		User loginUser = (User) request.getSession().getAttribute("loginUser");
 
+		try {
+			if (new UserService().getUser(Integer.parseInt(deleteUserId)) == null) {
+				messages.add("そのユーザーは存在しません");
+			}
+		} catch (Exception e) {
+			messages.add("ユーザーIDが不正です");
+		}
 		if (Integer.parseInt(deleteUserId) == loginUser.getId()) {
 			messages.add("権限がありません");
 		}

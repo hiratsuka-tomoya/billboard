@@ -49,8 +49,7 @@ public class DeleteCommentServlet extends HttpServlet {
 
 		if (!(loginUser.getDepartmentId() == 2 ||
 				(loginUser.getDepartmentId() == 3 &&
-				(loginUser.getBranchId() == commentUser.getBranchId() &&
-				 commentUser.getDepartmentId() == 4)))) {
+				(loginUser.getBranchId() == commentUser.getBranchId())))) {
 			messages.add("権限がありません");
 		}
 

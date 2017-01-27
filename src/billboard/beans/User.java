@@ -17,6 +17,17 @@ public class User extends UpdatableBean {
 	private Date createdDate;
 	private Date updatedDate;
 
+//	public boolean equals(User user) {
+//		if (this.getLoginId() == user.getLoginId() &&
+//				this.getLoginId() == user.getLoginId() &&
+//				this.getLoginId() == user.getLoginId() &&
+//				this.getLoginId() == user.getLoginId() &&
+//				this.getLoginId() == user.getLoginId() &&
+//				this.getLoginId() == user.getLoginId() &&) {
+//			return true;
+//		}
+//	}
+
 	@Override
 	public void readResultSet(ResultSet rs) {
 		try {

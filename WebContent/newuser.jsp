@@ -111,6 +111,8 @@ function changeDepartmentList() {
   </div>
 </div>
 <div class="container">
+<div class="row">
+<div class="col-md-8" >
 	<c:if test="${ not empty errorMessages }">
 			<div class="alert alert-warning" role="alert">
 				<div class="errorMessages">
@@ -131,7 +133,7 @@ function changeDepartmentList() {
 			<form action="newuser" method="post" name="userRegisterForm" onSubmit = "return passwordCheck()">
 				<div class="form-group">
 				<label for="loginId">ログインID</label>
-				<input name="loginId" class="form-control" value="${loginId}" id="loginId"  placeholder="（半角英数字6文字以上20文字以下）" maxlength="20" required/>
+				<input name="loginId" class="form-control" value="${loginId}" id="loginId"  placeholder="（半角英数字6文字以上20文字以下）" maxlength="20"  autocomplete="off"  required/>
 				</div>
 				<div class="form-group">
 				<label for="password">パスワード</label>
@@ -139,7 +141,7 @@ function changeDepartmentList() {
 				</div>
 				<div class="form-group">
 				<label for="checkPassword">パスワード（確認用）</label>
-				<input name="checkPassword" class="form-control" type="password" id="checkPassword"  placeholder="（記号を含む半角英数字6文字以上255文字以下）" maxlength="255" required/>
+				<input name="checkPassword" class="form-control" type="password" id="checkPassword"  placeholder="（記号を含む半角英数字6文字以上255文字以下）" maxlength="255"  autocomplete="off" required/>
 				</div>
 				<div class="form-group">
 				<label for="name">ユーザー名</label>
@@ -173,6 +175,8 @@ function changeDepartmentList() {
 			</form>
 		</div>
 	</div>
+</div>
+</div>
 </div>
 </div>
 <div class="push"></div>

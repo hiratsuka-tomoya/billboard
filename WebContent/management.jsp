@@ -81,16 +81,18 @@ function deleteCheck(target) {
   </div>
 </div>
 <div class="container">
-<c:if test="${ not empty errorMessages }">
-	<div class="errorMessages">
-		<ul>
-			<c:forEach items="${errorMessages}" var="message">
-				<li><c:out value="${message}" />
-			</c:forEach>
-		</ul>
+	<c:if test="${ not empty errorMessages }">
+	<div class="alert alert-warning" role="alert">
+		<div class="errorMessages">
+			<ul>
+				<c:forEach items="${errorMessages}" var="message">
+					<li><c:out value="${message}" />
+				</c:forEach>
+			</ul>
+		</div>
+		<c:remove var="errorMessages" scope="session"/>
 	</div>
-	<c:remove var="errorMessages" scope="session"/>
-</c:if>
+	</c:if>
 
 	<div class="panel panel-primary">
 		<div class="panel-heading">
@@ -99,7 +101,7 @@ function deleteCheck(target) {
 		<table class="table">
 		   <thead>
 		      <tr>
-		        <th>ID</th>
+		        <th>ログインID</th>
 		        <th>ユーザー名</th>
 		        <th>支店</th>
 		        <th>部署</th>
@@ -111,8 +113,8 @@ function deleteCheck(target) {
 		    <tbody>
 			<c:forEach items="${ users }" var="user">
 			  <tr>
-			    <td class="col-md-1"><c:out value="${user.id}" /></td>
-			    <td class="col-md-4"><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
+			    <td class="col-md-2"><c:out value="${user.loginId}" /></td>
+			    <td class="col-md-2"><a href="userEdit?editUserId=${user.id}"><c:out value="${user.name}" /></a></td>
 			    <td class="col-md-2">
 			    	<c:choose>
 						<c:when test="${user.branchId == 1}">本社</c:when>
@@ -143,25 +145,23 @@ function deleteCheck(target) {
 			    </td>
 		      	<td class="col-md-1">
 				    <form action="./top" method="post">
-						<c:if test="${ user.id == loginUser.id }">---</c:if>
 						<c:if test="${ user.id != loginUser.id }">
 						    <c:if test="${user.isStopped() == false}">
 						    	<input type="hidden" name="stopUserId" value="${user.id}">
-						    	<button type="submit" class="btn btn-default btn-sm" onClick="return stopCheck('${user.name}')">停止</button>
+						    	<button type="submit" class="btn btn-default btn-xs" onClick="return stopCheck('${user.name}')">停止</button>
 						    </c:if>
 						    <c:if test="${user.isStopped() == true}">
 								<input type="hidden" name="recoverUserId" value="${user.id}">
-								<button type="submit" class="btn btn-default btn-sm" onClick="return recoverCheck('${user.name}')">復帰</button>
+								<button type="submit" class="btn btn-default btn-xs" onClick="return recoverCheck('${user.name}')">復帰</button>
 						    </c:if>
 				    	</c:if>
 				    </form>
 			    </td>
-			    <td class="col-md-1">
+			    <td class="col-md-2">
 				    <form action="deleteUser" method="post">
-						<c:if test="${ user.id == loginUser.id }">---</c:if>
 						<c:if test="${ user.id != loginUser.id }">
 								<input type="hidden" name="deleteUserId" value="${user.id}">
-						    	<button type="submit" class="btn btn-default btn-sm" onClick="return deleteCheck('${user.name}')">削除</button>
+						    	<button type="submit" class="btn btn-default btn-xs" onClick="return deleteCheck('${user.name}')">削除</button>
 				    	</c:if>
 				    </form>
 			    </td>

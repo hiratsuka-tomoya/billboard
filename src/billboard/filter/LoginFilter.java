@@ -31,24 +31,31 @@ public class LoginFilter implements Filter {
 		if (target.matches(".*/login$") == false) {
 			if (session == null) {
 				session = ((HttpServletRequest) request).getSession(true);
-//				session.setAttribute("target", target);
-				((HttpServletResponse) response).sendRedirect("login");
+				((HttpServletResponse) response).sendRedirect("/billboard/login");
 			} else {
-				User loginUser = (User)session.getAttribute("loginUser");
+				User loginUser = (User) session.getAttribute("loginUser");
 				if (loginUser == null) {
-//					session.setAttribute("target", target);
-					((HttpServletResponse) response).sendRedirect("login");
-					return;
-				} else if (loginUser.isStopped() == true) {
-					messages.add("アカウントが停止されています");
-					session.setAttribute("errorMessages", messages);
-					session.removeAttribute("loginUser");
-//					session.setAttribute("target", target);
-					((HttpServletResponse) response).sendRedirect("login");
+					((HttpServletResponse) response).sendRedirect("/billboard/login");
 					return;
 				} else {
-					loginUser = (User)new UserService().getUser(loginUser.getId());
-					session.setAttribute("loginUser", loginUser);
+					// ログイン済みならログインユーザーをDBから再取得
+					loginUser = (User) new UserService().getUser(loginUser.getId());
+					if (loginUser == null) {
+						messages.add("アカウントが存在しません");
+						session.setAttribute("errorMessages", messages);
+						session.removeAttribute("loginUser");
+						((HttpServletResponse) response).sendRedirect("/billboard/login");
+						return;
+					} else if (loginUser.isStopped() == true) {
+						loginUser = (User) new UserService().getUser(loginUser.getId());
+						messages.add("アカウントが停止されています");
+						session.setAttribute("errorMessages", messages);
+						session.removeAttribute("loginUser");
+						((HttpServletResponse) response).sendRedirect("/billboard/login");
+						return;
+					} else {
+						session.setAttribute("loginUser", loginUser);
+					}
 				}
 			}
 		} else {

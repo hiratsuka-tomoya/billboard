@@ -14,9 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import billboard.beans.Bean;
+import billboard.beans.User;
 import billboard.service.UserService;
 
-@WebServlet(urlPatterns = { "/management/top" })
+@WebServlet(urlPatterns = { "/management/top", "/management/", "/management" })
 public class ManagementServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +26,7 @@ public class ManagementServlet extends HttpServlet {
 			throws IOException, ServletException {
 
 		if (request.getSession().getAttribute("loginUser") == null) {
-			response.sendRedirect("Billboard/login");
+			response.sendRedirect("/billboard/login");
 			return;
 		}
 
@@ -33,7 +34,7 @@ public class ManagementServlet extends HttpServlet {
 		if (request.getSession().getAttribute("errorMessages") == null) {
 			messages = new ArrayList<String>();
 		} else {
-			messages = (List<String>)request.getSession().getAttribute("errorMessages");
+			messages = (List<String>) request.getSession().getAttribute("errorMessages");
 		}
 
 		List<Bean> users = new UserService().getUsers();
@@ -44,8 +45,8 @@ public class ManagementServlet extends HttpServlet {
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		List<String> messages = new ArrayList<String>();
 
@@ -56,12 +57,29 @@ public class ManagementServlet extends HttpServlet {
 			if (StringUtils.isEmpty(userId)) {
 				messages.add("予期せぬエラーが発生しました");
 				request.setAttribute("errorMessages", messages);
-				response.sendRedirect("billboard/management/top");
+				response.sendRedirect("/billboard/management/top");
+				return;
 			} else {
-				new UserService().recoverUser(Integer.parseInt(userId));
+				User user = (User) new UserService().getUser(Integer.parseInt(userId));
+				if (user.isStopped() == false) {
+					messages.add("既に稼働中のユーザーです");
+					request.getSession().setAttribute("errorMessages", messages);
+					response.sendRedirect("/billboard/management/");
+					return;
+				} else {
+					new UserService().recoverUser(Integer.parseInt(userId));
+				}
 			}
 		} else {
-			new UserService().stopUser(Integer.parseInt(userId));
+			User user = (User) new UserService().getUser(Integer.parseInt(userId));
+			if (user.isStopped() == true) {
+				messages.add("既に停止中のユーザーです");
+				request.getSession().setAttribute("errorMessages", messages);
+				response.sendRedirect("/billboard/management/top");
+				return;
+			} else {
+				new UserService().stopUser(Integer.parseInt(userId));
+			}
 		}
 		List<Bean> users = new UserService().getUsers();
 		Collections.reverse(users);

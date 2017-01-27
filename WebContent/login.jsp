@@ -33,12 +33,23 @@ margin: 0;
 .push {
   height: 50px;
 }
+.errorMessage {
+  min-height: 60px;
+  margin-bottom: -60px;
+}
+.loginPanel,
+.push {
+  height: 60px;
+}
 -->
 </style>
 </head>
 <body>
 <div class="wrapper">
 <div class="container">
+<div class="row">
+<div class="col-md-6 col-md-offset-3" >
+	<div class="errorMessage">
 	<c:if test="${ not empty errorMessages }">
 			<div class="alert alert-warning" role="alert">
 				<div class="errorMessages">
@@ -51,7 +62,9 @@ margin: 0;
 				<c:remove var="errorMessages" scope="session"/>
 			</div>
 	</c:if>
-<div class="row">
+	</div>
+	<div class="push"></div>
+<div class="loginPanel">
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			ログイン
@@ -60,16 +73,18 @@ margin: 0;
 			<form action="login" method="post"><br />
 				<div class="form-group">
 				<label for="loginID">ログインID</label>
-				<input name="loginID" class="form-control" value="${loginID}" id="loginID"/>
+				<input name="loginID" class="form-control" value="${loginID}" id="loginID" required/>
 				</div>
 				<div class="form-group">
 				<label for="password">パスワード</label>
-				<input name="password" class="form-control" type="password" id="password"/>
+				<input name="password" class="form-control" type="password" id="password" required/>
 				</div>
 				<input type="submit" value="ログイン" /> <br />
 			</form>
 		</div>
 	</div>
+</div>
+</div>
 </div>
 </div>
 </div>

@@ -37,10 +37,18 @@ public class UserEditServlet extends HttpServlet {
 			try {
 				editUserId = Integer.parseInt(request.getParameter("editUserId"));
 			} catch (Exception e) {
+				messages.add("不正なアクセスです");
+				request.getSession().setAttribute("errorMessages", messages);
 				response.sendRedirect("/billboard/management/top");
 				return;
 			}
 			User editUser = (User) new UserService().getUser(editUserId);
+			if (editUser == null) {
+				messages.add("不正なアクセスです");
+				request.getSession().setAttribute("errorMessages", messages);
+				response.sendRedirect("/billboard/management/top");
+				return;
+			}
 			request.getSession().setAttribute("editUser", editUser);
 			request.setAttribute("loginId", editUser.getLoginId());
 			request.setAttribute("name", editUser.getName());
@@ -84,6 +92,11 @@ public class UserEditServlet extends HttpServlet {
 		int branchId = Integer.valueOf(request.getParameter("branchId"));
 		int departmentId = Integer.valueOf(request.getParameter("departmentId"));
 		User editUser = (User)request.getSession().getAttribute("editUser");
+		User editUserOnDB = (User)new UserService().getUser(editUser.getId());
+
+		if (editUser.getUpdatedDate().compareTo(editUserOnDB.getUpdatedDate()) != 0) {
+			messages.add("対象の情報が取得時と異なるため、変更できませんでした");
+		}
 
 		session.removeAttribute("loginId");
 		session.removeAttribute("name");

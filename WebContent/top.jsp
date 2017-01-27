@@ -105,13 +105,13 @@ $(function (str) {
 				</div>
 				<div class="form-group">
 				<div class="input-group datepicker">
-					<input type="text" id="datepicker1" name="refineStartDate" class="form-control" value="${ refineStartDate }" size="8" placeholder="from">
+					<input type="text" id="datepicker1" name="refineStartDate" class="form-control" value="${ refineStartDate }" size="8" autocomplete="off" placeholder="from">
 				    <span class="input-group-btn">
 				        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-calendar"></span></button>
 				    </span>
                 </div>
                 <div class="input-group datepicker">
-					<input type="text" id="datepicker2" name="refineEndDate" class="form-control" value="${ refineEndDate }"  size="8" placeholder="to">
+					<input type="text" id="datepicker2" name="refineEndDate" class="form-control" value="${ refineEndDate }"  size="8" autocomplete="off" placeholder="to">
 				    <span class="input-group-btn">
 				        <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-calendar"></span></button>
 				    </span>
@@ -148,8 +148,8 @@ $(function (str) {
 				<div class="panel panel-primary">
 					<div class="panel-heading"><h4><c:out value="${posting.title}" /></h4>
 						<span class="glyphicon glyphicon-user" aria-hidden="true"></span><c:out value="${ posting.userName }" />
-						<c:out value="Category:${ posting.category } " />
-						Date:<fmt:formatDate value="${ posting.createdDate }" pattern="yyyy/MM/dd HH:mm:ss" />
+						<c:out value="【Category】${ posting.category } " />
+						<c:out value="【Date】" /><fmt:formatDate value="${ posting.createdDate }" pattern="yyyy/MM/dd HH:mm:ss" />
 					</div>
 		 			<div class="panel-body">
 					<div class="posting">
@@ -166,7 +166,7 @@ $(function (str) {
 								<c:if test="${ loginUser.departmentId == 2}">
 								<button type="submit" class="btn btn-default btn-sm">削除</button>
 								</c:if>
-								<c:if test="${ loginUser.departmentId == 3}">
+								<c:if test="${ loginUser.departmentId == 3 && loginUser.branchId == posting.userBranchId}">
 								<button type="submit" class="btn btn-default btn-sm">削除</button>
 								</c:if>
 								</form>
@@ -188,7 +188,7 @@ $(function (str) {
 													<c:if test="${ loginUser.departmentId == 2}">
 													<span id="type1_right"><button type="submit" class="btn btn-default btn-sm">削除</button></span>
 													</c:if>
-													<c:if test="${ loginUser.departmentId == 3}">
+													<c:if test="${ loginUser.departmentId == 3 && loginUser.branchId == comment.userBranchId}">
 													<span id="type1_right"><button type="submit" class="btn btn-default btn-sm">削除</button></span>
 													</c:if>
 													<span class="glyphicon glyphicon-user" aria-hidden="true"></span><c:out value="${ comment.userName }" />

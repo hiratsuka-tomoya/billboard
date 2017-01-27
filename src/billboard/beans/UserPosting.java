@@ -13,6 +13,24 @@ public class UserPosting extends Bean {
 	private String category;
 	private int userId;
 	private String userName;
+	private int userDepartmentId;
+	private int userBranchId;
+	public int getUserDepartmentId() {
+		return userDepartmentId;
+	}
+
+	public void setUserDepartmentId(int userDepartmentId) {
+		this.userDepartmentId = userDepartmentId;
+	}
+
+	public int getUserBranchId() {
+		return userBranchId;
+	}
+
+	public void setUserBranchId(int userBranchId) {
+		this.userBranchId = userBranchId;
+	}
+
 	private Date createdDate;
 	private Date updatedDate;
 
@@ -26,6 +44,8 @@ public class UserPosting extends Bean {
 			this.setCategory(rs.getString("category"));
 			this.setUserId(rs.getInt("user_id"));
 			this.setUserName(rs.getString("user_name"));
+			this.setUserBranchId(rs.getInt("user_branch_id"));
+			this.setUserDepartmentId(rs.getInt("user_department_id"));
 			this.setCreatedDate(rs.getTimestamp ("created_at"));
 			this.setUpdatedDate(rs.getTimestamp ("updated_at"));
 		} catch (SQLException e) {

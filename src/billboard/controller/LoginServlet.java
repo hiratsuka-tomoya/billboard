@@ -48,6 +48,7 @@ public class LoginServlet extends HttpServlet {
 
 			if (user != null) {
 				session.setAttribute("loginUser", user);
+				session.removeAttribute("loginID");
 				response.sendRedirect("./");
 			} else {
 				messages.add("ログインに失敗しました。");

@@ -67,6 +67,8 @@ margin: 0;
   </div>
 </div>
 <div class="container">
+<div class="row">
+<div class="col-md-10">
 	<c:if test="${ not empty errorMessages }">
 			<div class="alert alert-warning" role="alert">
 				<div class="errorMessages">
@@ -88,7 +90,7 @@ margin: 0;
 	<form action="newpost" method="post">
 	<div class="form-group">
 	<label for="title">件名</label>
-	<input type="text" class="form-control" id="InputText" placeholder="（50文字まで）" name="title" value="${title}" size="50" maxlength="50" required/>
+	<input type="text" class="form-control" id="InputText" placeholder="（50文字まで）" name="title" value="${title}" size="50" maxlength="50"  autocomplete="off"  required/>
 	</div>
 
 	<div class="form-group">
@@ -110,6 +112,8 @@ margin: 0;
 	</form>
 	</div>
 	</div>
+</div>
+</div>
 </div>
 </div>
 <div class="push"></div>

@@ -8,6 +8,8 @@ SELECT
 	postings.category,
 	postings.user_id,
 	users.name as user_name,
+	users.department_id as user_department_id,
+	users.branch_id as user_branch_id,
 	postings.created_at,
 	postings.updated_at
 FROM postings
@@ -23,6 +25,8 @@ SELECT
 	comments.user_id,
 	comments.posting_id,
 	users.name as user_name,
+	users.department_id as user_department_id,
+	users.branch_id as user_branch_id,
 	comments.created_at,
 	comments.updated_at
 FROM comments
