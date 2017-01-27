@@ -3,3 +3,4 @@
 !/WebContent
 !/others
 !.gitignore
+!billboard_dump.sql
